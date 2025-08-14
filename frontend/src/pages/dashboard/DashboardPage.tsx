@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Grid,
@@ -37,6 +38,7 @@ import { useAuth } from "../../contexts/AuthContext";
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   // Mock data for demonstration
   const pensionData = {
@@ -141,6 +143,52 @@ NSSF Uganda - Plot 101, Jinja Road, Kampala - Tel: +256 312 234 400`;
     const link = document.createElement("a");
     link.href = url;
     link.download = `NSSF_Dashboard_Statement_${
+      new Date().toISOString().split("T")[0]
+    }.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
+  // Handler functions for Quick Actions
+  const handleUpdateProfile = () => {
+    navigate("/profile");
+  };
+
+  const handleContactSupport = () => {
+    navigate("/messages");
+  };
+
+  const handleSecuritySettings = () => {
+    navigate("/profile");
+  };
+
+  const handleViewAllTransactions = () => {
+    navigate("/payments");
+  };
+
+  const handleDownloadAnnouncement = (announcementId: number) => {
+    const announcement = announcements.find((a) => a.id === announcementId);
+    if (!announcement) return;
+
+    const content = `NSSF ANNOUNCEMENT
+Date: ${announcement.date}
+Priority: ${announcement.priority.toUpperCase()}
+
+${announcement.title}
+
+${announcement.message}
+
+---
+NSSF Uganda - Plot 101, Jinja Road, Kampala
+Tel: +256 312 234 400 | Email: info@nssfug.org`;
+
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `NSSF_Announcement_${announcementId}_${
       new Date().toISOString().split("T")[0]
     }.txt`;
     document.body.appendChild(link);
@@ -291,6 +339,7 @@ NSSF Uganda - Plot 101, Jinja Road, Kampala - Tel: +256 312 234 400`;
                   variant="outlined"
                   startIcon={<Person />}
                   sx={{ py: 1.5 }}
+                  onClick={handleUpdateProfile}
                 >
                   Update Profile
                 </Button>
@@ -301,6 +350,7 @@ NSSF Uganda - Plot 101, Jinja Road, Kampala - Tel: +256 312 234 400`;
                   variant="outlined"
                   startIcon={<Message />}
                   sx={{ py: 1.5 }}
+                  onClick={handleContactSupport}
                 >
                   Contact Support
                 </Button>
@@ -311,6 +361,7 @@ NSSF Uganda - Plot 101, Jinja Road, Kampala - Tel: +256 312 234 400`;
                   variant="outlined"
                   startIcon={<Security />}
                   sx={{ py: 1.5 }}
+                  onClick={handleSecuritySettings}
                 >
                   Security Settings
                 </Button>
@@ -353,7 +404,11 @@ NSSF Uganda - Plot 101, Jinja Road, Kampala - Tel: +256 312 234 400`;
                 ))}
               </List>
               <Box sx={{ mt: 2, textAlign: "center" }}>
-                <Button variant="text" color="primary">
+                <Button
+                  variant="text"
+                  color="primary"
+                  onClick={handleViewAllTransactions}
+                >
                   View All Transactions
                 </Button>
               </Box>
@@ -375,7 +430,13 @@ NSSF Uganda - Plot 101, Jinja Road, Kampala - Tel: +256 312 234 400`;
                   severity={announcement.priority as any}
                   sx={{ mb: 2 }}
                   action={
-                    <IconButton color="inherit" size="small">
+                    <IconButton
+                      color="inherit"
+                      size="small"
+                      onClick={() =>
+                        handleDownloadAnnouncement(announcement.id)
+                      }
+                    >
                       <Download />
                     </IconButton>
                   }
