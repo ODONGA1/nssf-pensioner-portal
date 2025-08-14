@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -26,6 +27,13 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import {
   AccountBalance,
@@ -36,7 +44,13 @@ import {
   CheckCircle,
   Schedule,
   Info,
+  Savings,
+  Add,
+  Flag,
+  Close,
+  TrackChanges,
 } from "@mui/icons-material";
+import DepositModal from "../../components/DepositModal";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -62,6 +76,46 @@ function TabPanel(props: TabPanelProps) {
 
 const BenefitsPage: React.FC = () => {
   const [tabValue, setTabValue] = useState(0);
+  const [depositModalOpen, setDepositModalOpen] = useState(false);
+  const [goalModalOpen, setGoalModalOpen] = useState(false);
+  const [goalForm, setGoalForm] = useState({
+    amount: "",
+    deadline: "",
+    description: "",
+  });
+  const location = useLocation();
+
+  // Handle Make Deposit button click
+  const handleMakeDeposit = () => {
+    setDepositModalOpen(true);
+  };
+
+  // Handle Set Goal button click
+  const handleSetGoal = () => {
+    setGoalModalOpen(true);
+  };
+
+  // Handle goal form submission
+  const handleGoalSubmit = () => {
+    // Here you would typically send the goal data to the backend
+    console.log("Goal set:", goalForm);
+    alert("Savings goal set successfully!");
+    setGoalModalOpen(false);
+    setGoalForm({
+      amount: "",
+      deadline: "",
+      description: "",
+    });
+  };
+
+  // Check for URL parameters to auto-select tab
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const tabParam = searchParams.get("tab");
+    if (tabParam === "savings") {
+      setTabValue(4); // Voluntary Savings tab index
+    }
+  }, [location.search]);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -121,6 +175,66 @@ const BenefitsPage: React.FC = () => {
     accrualRate: 0.025,
     calculatedPension: 850000,
   };
+
+  // Voluntary savings data
+  const savingsData = {
+    balance: 15750000, // UGX
+    monthlyGrowth: 5.2, // Percentage
+    interestEarned: 1250000, // UGX this year
+    goalAmount: 20000000, // UGX
+    goalProgress: 78.75, // Percentage
+    goalDeadline: "2025-12-31",
+    lastDeposit: {
+      amount: 500000,
+      date: "2025-08-10",
+    },
+    nextScheduledDeposit: "2025-09-10",
+    interestRate: 12.5, // Annual percentage
+    totalContributions: 14500000,
+  };
+
+  const savingsTransactions = [
+    {
+      id: 1,
+      date: "2025-08-10",
+      amount: 500000,
+      type: "Voluntary Deposit",
+      method: "Bank Transfer",
+      status: "Completed",
+    },
+    {
+      id: 2,
+      date: "2025-08-01",
+      amount: 125000,
+      type: "Interest Payment",
+      method: "Auto Credit",
+      status: "Completed",
+    },
+    {
+      id: 3,
+      date: "2025-07-10",
+      amount: 500000,
+      type: "Voluntary Deposit",
+      method: "Mobile Money",
+      status: "Completed",
+    },
+    {
+      id: 4,
+      date: "2025-07-01",
+      amount: 120000,
+      type: "Interest Payment",
+      method: "Auto Credit",
+      status: "Completed",
+    },
+    {
+      id: 5,
+      date: "2025-06-10",
+      amount: 500000,
+      type: "Voluntary Deposit",
+      method: "Bank Transfer",
+      status: "Completed",
+    },
+  ];
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-UG", {
@@ -322,6 +436,7 @@ For official verification, contact NSSF at +256 312 234 400`;
             <Tab label="Pension Calculation" />
             <Tab label="Benefits Details" />
             <Tab label="Projections" />
+            <Tab label="Voluntary Savings" />
           </Tabs>
         </Box>
 
@@ -618,7 +733,611 @@ For official verification, contact NSSF at +256 312 234 400`;
             </Grid>
           </Grid>
         </TabPanel>
+
+        {/* Voluntary Savings Tab */}
+        <TabPanel value={tabValue} index={4}>
+          <Grid container spacing={3}>
+            {/* Savings Overview Cards - Half Size */}
+            {/* Main Balance Card */}
+            <Grid item xs={12} md={6}>
+              <Card
+                elevation={2}
+                sx={{
+                  background: "linear-gradient(135deg, #6366F1, #8B5CF6)",
+                  color: "white",
+                  borderRadius: "12px",
+                  height: "80px",
+                }}
+              >
+                <CardContent
+                  sx={{
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    p: 2,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      background: "rgba(255, 255, 255, 0.2)",
+                      borderRadius: "8px",
+                      p: 1,
+                      mr: 2,
+                    }}
+                  >
+                    <Savings sx={{ fontSize: 24, color: "white" }} />
+                  </Box>
+                  <Box sx={{ flex: 1 }}>
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ fontWeight: 500, mb: 0.5 }}
+                    >
+                      Current Savings Balance
+                    </Typography>
+                    <Typography variant="h5" fontWeight="bold">
+                      {formatCurrency(savingsData.balance)}
+                    </Typography>
+                    <Typography variant="caption" sx={{ opacity: 0.9 }}>
+                      +{savingsData.monthlyGrowth}% growth this month
+                    </Typography>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Goal Progress - Half Size */}
+            <Grid item xs={12} md={2}>
+              <Card
+                elevation={1}
+                sx={{
+                  height: "80px",
+                  background: "rgba(99, 102, 241, 0.05)",
+                  border: "1px solid rgba(99, 102, 241, 0.1)",
+                  borderRadius: "8px",
+                }}
+              >
+                <CardContent
+                  sx={{
+                    p: 1.5,
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Box sx={{ textAlign: "center" }}>
+                    <Flag sx={{ fontSize: 16, color: "#6366F1", mb: 0.5 }} />
+                    <Typography variant="caption" color="text.secondary">
+                      Goal Progress
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight="bold"
+                      color="#6366F1"
+                    >
+                      {savingsData.goalProgress.toFixed(1)}%
+                    </Typography>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Interest Earned - Half Size */}
+            <Grid item xs={12} md={2}>
+              <Card
+                elevation={1}
+                sx={{
+                  height: "80px",
+                  background: "rgba(16, 185, 129, 0.05)",
+                  border: "1px solid rgba(16, 185, 129, 0.1)",
+                  borderRadius: "8px",
+                }}
+              >
+                <CardContent
+                  sx={{
+                    p: 1.5,
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Box sx={{ textAlign: "center" }}>
+                    <TrendingUp
+                      sx={{ fontSize: 16, color: "#10B981", mb: 0.5 }}
+                    />
+                    <Typography variant="caption" color="text.secondary">
+                      Interest (2025)
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight="bold"
+                      color="#10B981"
+                    >
+                      {formatCurrency(savingsData.interestEarned)}
+                    </Typography>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Last Deposit - Half Size */}
+            <Grid item xs={12} md={2}>
+              <Card
+                elevation={1}
+                sx={{
+                  height: "80px",
+                  background: "rgba(0, 0, 0, 0.02)",
+                  border: "1px solid rgba(0, 0, 0, 0.08)",
+                  borderRadius: "8px",
+                }}
+              >
+                <CardContent
+                  sx={{
+                    p: 1.5,
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Box sx={{ textAlign: "center" }}>
+                    <Add
+                      sx={{ fontSize: 16, color: "text.secondary", mb: 0.5 }}
+                    />
+                    <Typography variant="caption" color="text.secondary">
+                      Last Deposit
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight="bold"
+                      color="text.primary"
+                    >
+                      {formatCurrency(savingsData.lastDeposit.amount)}
+                    </Typography>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Goal Progress */}
+            <Grid item xs={12} md={6}>
+              <Card elevation={2}>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Savings Goal Progress
+                  </Typography>
+                  <Box sx={{ mb: 2 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        mb: 1,
+                      }}
+                    >
+                      <Typography variant="body2" color="text.secondary">
+                        Current: {formatCurrency(savingsData.balance)}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Target: {formatCurrency(savingsData.goalAmount)}
+                      </Typography>
+                    </Box>
+                    <LinearProgress
+                      variant="determinate"
+                      value={savingsData.goalProgress}
+                      sx={{ height: 10, borderRadius: 5 }}
+                      color="success"
+                    />
+                    <Typography
+                      variant="h6"
+                      color="success.main"
+                      sx={{ mt: 1 }}
+                    >
+                      {savingsData.goalProgress.toFixed(1)}% Complete
+                    </Typography>
+                  </Box>
+                  <Alert severity="info" sx={{ mt: 2 }}>
+                    <Typography variant="body2">
+                      You need{" "}
+                      {formatCurrency(
+                        savingsData.goalAmount - savingsData.balance
+                      )}{" "}
+                      more to reach your goal by {savingsData.goalDeadline}.
+                    </Typography>
+                  </Alert>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Quick Actions */}
+            <Grid item xs={12} md={6}>
+              <Card elevation={2}>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Quick Actions
+                  </Typography>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        startIcon={<Add />}
+                        onClick={handleMakeDeposit}
+                        sx={{
+                          py: 1.5,
+                          background:
+                            "linear-gradient(135deg, #6366F1, #8B5CF6)",
+                          "&:hover": {
+                            background:
+                              "linear-gradient(135deg, #5B21B6, #7C3AED)",
+                            transform: "translateY(-1px)",
+                            boxShadow: "0 4px 12px rgba(99, 102, 241, 0.3)",
+                          },
+                          transition: "all 0.3s ease",
+                        }}
+                      >
+                        Make Deposit
+                      </Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        startIcon={<Flag />}
+                        onClick={handleSetGoal}
+                        sx={{
+                          py: 1,
+                          borderColor: "#6366F1",
+                          color: "#6366F1",
+                          "&:hover": {
+                            borderColor: "#5B21B6",
+                            backgroundColor: "rgba(99, 102, 241, 0.05)",
+                          },
+                        }}
+                      >
+                        Set Goal
+                      </Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        startIcon={<Download />}
+                        sx={{
+                          py: 1,
+                          "&:hover": {
+                            backgroundColor: "rgba(0, 0, 0, 0.05)",
+                          },
+                        }}
+                      >
+                        Download Statement
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Recent Savings Transactions */}
+            <Grid item xs={12}>
+              <Card elevation={2}>
+                <CardContent>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      mb: 2,
+                    }}
+                  >
+                    <Typography variant="h6">
+                      Recent Savings Transactions
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      startIcon={<Download />}
+                      size="small"
+                    >
+                      Export All
+                    </Button>
+                  </Box>
+                  <TableContainer>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Date</TableCell>
+                          <TableCell>Type</TableCell>
+                          <TableCell>Method</TableCell>
+                          <TableCell align="right">Amount</TableCell>
+                          <TableCell>Status</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {savingsTransactions.map((transaction) => (
+                          <TableRow key={transaction.id}>
+                            <TableCell>{transaction.date}</TableCell>
+                            <TableCell>
+                              <Box
+                                sx={{ display: "flex", alignItems: "center" }}
+                              >
+                                {transaction.type === "Voluntary Deposit" ? (
+                                  <Add
+                                    sx={{
+                                      fontSize: 16,
+                                      mr: 1,
+                                      color: "success.main",
+                                    }}
+                                  />
+                                ) : (
+                                  <TrendingUp
+                                    sx={{
+                                      fontSize: 16,
+                                      mr: 1,
+                                      color: "info.main",
+                                    }}
+                                  />
+                                )}
+                                {transaction.type}
+                              </Box>
+                            </TableCell>
+                            <TableCell>{transaction.method}</TableCell>
+                            <TableCell align="right">
+                              <Typography
+                                color={
+                                  transaction.type === "Voluntary Deposit"
+                                    ? "success.main"
+                                    : "info.main"
+                                }
+                                fontWeight="medium"
+                              >
+                                {formatCurrency(transaction.amount)}
+                              </Typography>
+                            </TableCell>
+                            <TableCell>
+                              <Chip
+                                label={transaction.status}
+                                color="success"
+                                size="small"
+                                icon={<CheckCircle />}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Savings Information */}
+            <Grid item xs={12} md={6}>
+              <Card elevation={2}>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Account Information
+                  </Typography>
+                  <List>
+                    <ListItem>
+                      <ListItemIcon>
+                        <AccountBalance color="primary" />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Total Contributions"
+                        secondary={formatCurrency(
+                          savingsData.totalContributions
+                        )}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <TrendingUp color="success" />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Annual Interest Rate"
+                        secondary={`${savingsData.interestRate}%`}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <CalendarToday color="info" />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Next Scheduled Deposit"
+                        secondary={savingsData.nextScheduledDeposit}
+                      />
+                    </ListItem>
+                  </List>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Savings Tips */}
+            <Grid item xs={12} md={6}>
+              <Card elevation={2}>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Savings Tips
+                  </Typography>
+                  <List>
+                    <ListItem>
+                      <ListItemIcon>
+                        <Info color="primary" />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Regular Contributions"
+                        secondary="Set up automatic monthly deposits to reach your goals faster"
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <TrendingUp color="success" />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Compound Interest"
+                        secondary="Your interest earns interest, growing your savings exponentially"
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <Flag color="warning" />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Goal Setting"
+                        secondary="Clear savings goals help you stay motivated and on track"
+                      />
+                    </ListItem>
+                  </List>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </TabPanel>
       </Card>
+
+      {/* Deposit Modal */}
+      <DepositModal
+        open={depositModalOpen}
+        onClose={() => setDepositModalOpen(false)}
+        currentBalance={savingsData.balance}
+      />
+
+      {/* Goal Setting Modal */}
+      <Dialog
+        open={goalModalOpen}
+        onClose={() => setGoalModalOpen(false)}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          sx: { borderRadius: 2 },
+        }}
+      >
+        <DialogTitle
+          sx={{ pb: 2, borderBottom: "1px solid", borderColor: "divider" }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <TrackChanges
+                sx={{ mr: 2, color: "primary.main", fontSize: 28 }}
+              />
+              <Typography variant="h6" fontWeight="bold">
+                Set Savings Goal
+              </Typography>
+            </Box>
+            <IconButton onClick={() => setGoalModalOpen(false)}>
+              <Close />
+            </IconButton>
+          </Box>
+        </DialogTitle>
+
+        <DialogContent sx={{ p: 3 }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+            Set a specific savings target to help you stay motivated and track
+            your progress.
+          </Typography>
+
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Goal Amount"
+                value={goalForm.amount}
+                onChange={(e) =>
+                  setGoalForm({ ...goalForm, amount: e.target.value })
+                }
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">UGX</InputAdornment>
+                  ),
+                }}
+                helperText="Enter your target savings amount"
+                type="number"
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Target Deadline"
+                value={goalForm.deadline}
+                onChange={(e) =>
+                  setGoalForm({ ...goalForm, deadline: e.target.value })
+                }
+                type="date"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                helperText="When do you want to achieve this goal?"
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Goal Description (Optional)"
+                value={goalForm.description}
+                onChange={(e) =>
+                  setGoalForm({ ...goalForm, description: e.target.value })
+                }
+                multiline
+                rows={3}
+                placeholder="What is this savings goal for? (e.g., Emergency fund, Car purchase, House down payment)"
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <Alert severity="info" sx={{ mt: 2 }}>
+                <Typography variant="body2">
+                  Current savings balance:{" "}
+                  <strong>{formatCurrency(savingsData.balance)}</strong>
+                </Typography>
+                {goalForm.amount && (
+                  <Typography variant="body2">
+                    Amount needed:{" "}
+                    <strong>
+                      {formatCurrency(
+                        Math.max(
+                          0,
+                          parseInt(goalForm.amount) - savingsData.balance
+                        )
+                      )}
+                    </strong>
+                  </Typography>
+                )}
+              </Alert>
+            </Grid>
+          </Grid>
+        </DialogContent>
+
+        <DialogActions
+          sx={{ p: 3, borderTop: "1px solid", borderColor: "divider" }}
+        >
+          <Button onClick={() => setGoalModalOpen(false)} color="inherit">
+            Cancel
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={handleGoalSubmit}
+            disabled={!goalForm.amount || !goalForm.deadline}
+            sx={{
+              background: "linear-gradient(135deg, #6366F1, #8B5CF6)",
+              "&:hover": {
+                background: "linear-gradient(135deg, #5B21B6, #7C3AED)",
+              },
+            }}
+          >
+            Set Goal
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

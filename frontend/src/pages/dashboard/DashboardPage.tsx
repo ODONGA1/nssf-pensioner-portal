@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -33,12 +33,19 @@ import {
   Email,
   LocationOn,
   CheckCircle,
+  Savings,
+  Add,
+  Flag,
 } from "@mui/icons-material";
 import { useAuth } from "../../contexts/AuthContext";
+import DepositModal from "../../components/DepositModal";
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  // Modal state
+  const [depositModalOpen, setDepositModalOpen] = useState(false);
 
   // Mock data for demonstration
   const pensionData = {
@@ -47,6 +54,21 @@ const DashboardPage: React.FC = () => {
     nextPaymentDate: "2025-09-01",
     contributionYears: 32,
     status: "Active",
+  };
+
+  // Voluntary savings data
+  const savingsData = {
+    balance: 15750000, // UGX
+    monthlyGrowth: 5.2, // Percentage
+    interestEarned: 1250000, // UGX this year
+    goalAmount: 20000000, // UGX
+    goalProgress: 78.75, // Percentage
+    goalDeadline: "2025-12-31",
+    lastDeposit: {
+      amount: 500000,
+      date: "2025-08-10",
+    },
+    nextScheduledDeposit: "2025-09-10",
   };
 
   const recentTransactions = [
@@ -73,6 +95,23 @@ const DashboardPage: React.FC = () => {
       type: "Monthly Pension",
       status: "Completed",
       description: "Monthly pension payment",
+    },
+    // Add voluntary savings transactions
+    {
+      id: 4,
+      date: "2025-08-10",
+      amount: 500000,
+      type: "Voluntary Savings Deposit",
+      status: "Completed",
+      description: "Monthly voluntary savings contribution",
+    },
+    {
+      id: 5,
+      date: "2025-08-01",
+      amount: 125000,
+      type: "Savings Interest",
+      status: "Completed",
+      description: "Monthly interest payment on savings",
     },
   ];
 
@@ -162,6 +201,14 @@ NSSF Uganda - Plot 101, Jinja Road, Kampala - Tel: +256 312 234 400`;
 
   const handleSecuritySettings = () => {
     navigate("/profile");
+  };
+
+  const handleMakeDeposit = () => {
+    setDepositModalOpen(true);
+  };
+
+  const handleViewSavings = () => {
+    navigate("/benefits?tab=savings"); // Navigate to benefits page with savings tab
   };
 
   const handleViewAllTransactions = () => {
@@ -315,6 +362,237 @@ Tel: +256 312 234 400 | Email: info@nssfug.org`;
           </Card>
         </Grid>
 
+        {/* Voluntary Savings Cards - Half Size */}
+        {/* Main Voluntary Savings Card */}
+        <Grid item xs={12} md={3} lg={3}>
+          <Card
+            elevation={2}
+            sx={{
+              background: "linear-gradient(135deg, #6366F1, #8B5CF6)",
+              color: "white",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              borderRadius: "12px",
+              height: "80px",
+              "&:hover": {
+                transform: "translateY(-2px)",
+                boxShadow: "0 8px 16px rgba(99, 102, 241, 0.25)",
+                background: "linear-gradient(135deg, #5B21B6, #7C3AED)",
+              },
+            }}
+            onClick={handleViewSavings}
+          >
+            <CardContent
+              sx={{
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                p: 1.5,
+              }}
+            >
+              <Box
+                sx={{
+                  background: "rgba(255, 255, 255, 0.2)",
+                  borderRadius: "8px",
+                  p: 0.5,
+                  mr: 1.5,
+                }}
+              >
+                <Savings sx={{ fontSize: 20, color: "white" }} />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <Typography
+                  variant="caption"
+                  sx={{ fontWeight: 500, display: "block" }}
+                >
+                  Voluntary Savings
+                </Typography>
+                <Typography variant="h6" fontWeight="bold">
+                  {formatCurrency(savingsData.balance)}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{ fontSize: "0.7rem", opacity: 0.9 }}
+                >
+                  +{savingsData.monthlyGrowth}% this month
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Goal Progress - Half Size */}
+        <Grid item xs={12} md={3} lg={3}>
+          <Card
+            elevation={1}
+            sx={{
+              height: "80px",
+              background: "rgba(99, 102, 241, 0.03)",
+              border: "1px solid rgba(99, 102, 241, 0.08)",
+              borderRadius: "8px",
+              transition: "all 0.3s ease",
+              "&:hover": {
+                transform: "translateY(-1px)",
+                boxShadow: "0 2px 8px rgba(99, 102, 241, 0.1)",
+              },
+            }}
+          >
+            <CardContent
+              sx={{
+                p: 1.5,
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Box
+                sx={{
+                  background: "rgba(99, 102, 241, 0.1)",
+                  borderRadius: "8px",
+                  p: 0.5,
+                  mr: 1.5,
+                }}
+              >
+                <Flag sx={{ fontSize: 16, color: "#6366F1" }} />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  display="block"
+                >
+                  Goal Progress
+                </Typography>
+                <Typography variant="h6" fontWeight="bold" color="#6366F1">
+                  {savingsData.goalProgress.toFixed(1)}%
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ fontSize: "0.7rem" }}
+                >
+                  of target
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Last Deposit - Half Size */}
+        <Grid item xs={12} md={3} lg={3}>
+          <Card
+            elevation={1}
+            sx={{
+              height: "80px",
+              background: "rgba(0, 0, 0, 0.01)",
+              border: "1px solid rgba(0, 0, 0, 0.06)",
+              borderRadius: "8px",
+              transition: "all 0.3s ease",
+              "&:hover": {
+                transform: "translateY(-1px)",
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
+              },
+            }}
+          >
+            <CardContent
+              sx={{
+                p: 1.5,
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Box
+                sx={{
+                  background: "rgba(0, 0, 0, 0.05)",
+                  borderRadius: "8px",
+                  p: 0.5,
+                  mr: 1.5,
+                }}
+              >
+                <Add sx={{ fontSize: 16, color: "text.secondary" }} />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  display="block"
+                >
+                  Last Deposit
+                </Typography>
+                <Typography variant="h6" fontWeight="bold" color="text.primary">
+                  {formatCurrency(savingsData.lastDeposit.amount)}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ fontSize: "0.7rem" }}
+                >
+                  {savingsData.lastDeposit.date}
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Interest Earned - Half Size */}
+        <Grid item xs={12} md={3} lg={3}>
+          <Card
+            elevation={1}
+            sx={{
+              height: "80px",
+              background: "rgba(16, 185, 129, 0.03)",
+              border: "1px solid rgba(16, 185, 129, 0.08)",
+              borderRadius: "8px",
+              transition: "all 0.3s ease",
+              "&:hover": {
+                transform: "translateY(-1px)",
+                boxShadow: "0 2px 8px rgba(16, 185, 129, 0.1)",
+              },
+            }}
+          >
+            <CardContent
+              sx={{
+                p: 1.5,
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Box
+                sx={{
+                  background: "rgba(16, 185, 129, 0.1)",
+                  borderRadius: "8px",
+                  p: 0.5,
+                  mr: 1.5,
+                }}
+              >
+                <TrendingUp sx={{ fontSize: 16, color: "#10B981" }} />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  display="block"
+                >
+                  Interest (2025)
+                </Typography>
+                <Typography variant="h6" fontWeight="bold" color="#10B981">
+                  {formatCurrency(savingsData.interestEarned)}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ fontSize: "0.7rem" }}
+                >
+                  earned
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+
         {/* Quick Actions */}
         <Grid item xs={12}>
           <Paper elevation={2} sx={{ p: 3 }}>
@@ -322,7 +600,7 @@ Tel: +256 312 234 400 | Email: info@nssfug.org`;
               Quick Actions
             </Typography>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={2.4}>
                 <Button
                   fullWidth
                   variant="outlined"
@@ -333,7 +611,7 @@ Tel: +256 312 234 400 | Email: info@nssfug.org`;
                   Download Statement
                 </Button>
               </Grid>
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={2.4}>
                 <Button
                   fullWidth
                   variant="outlined"
@@ -344,7 +622,7 @@ Tel: +256 312 234 400 | Email: info@nssfug.org`;
                   Update Profile
                 </Button>
               </Grid>
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={2.4}>
                 <Button
                   fullWidth
                   variant="outlined"
@@ -355,7 +633,7 @@ Tel: +256 312 234 400 | Email: info@nssfug.org`;
                   Contact Support
                 </Button>
               </Grid>
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={2.4}>
                 <Button
                   fullWidth
                   variant="outlined"
@@ -364,6 +642,26 @@ Tel: +256 312 234 400 | Email: info@nssfug.org`;
                   onClick={handleSecuritySettings}
                 >
                   Security Settings
+                </Button>
+              </Grid>
+              <Grid item xs={12} sm={6} md={2.4}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  startIcon={<Add />}
+                  sx={{
+                    py: 1.5,
+                    background: "linear-gradient(135deg, #6366F1, #8B5CF6)",
+                    "&:hover": {
+                      background: "linear-gradient(135deg, #5B21B6, #7C3AED)",
+                      transform: "translateY(-1px)",
+                      boxShadow: "0 4px 12px rgba(99, 102, 241, 0.3)",
+                    },
+                    transition: "all 0.3s ease",
+                  }}
+                  onClick={handleMakeDeposit}
+                >
+                  Make Deposit
                 </Button>
               </Grid>
             </Grid>
@@ -495,6 +793,13 @@ Tel: +256 312 234 400 | Email: info@nssfug.org`;
           </Paper>
         </Grid>
       </Grid>
+
+      {/* Deposit Modal */}
+      <DepositModal
+        open={depositModalOpen}
+        onClose={() => setDepositModalOpen(false)}
+        currentBalance={savingsData.balance}
+      />
     </Box>
   );
 };
