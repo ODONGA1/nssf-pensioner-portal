@@ -1,0 +1,432 @@
+// Prisma schema file for NSSF Pensioner Self-Service Portal
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+enum UserRole {
+  PENSIONER
+  ADMIN
+  SUPPORT_STAFF
+  FINANCE_OFFICER
+}
+
+enum PensionStatus {
+  ACTIVE
+  SUSPENDED
+  DECEASED
+  TRANSFERRED
+  PENDING
+}
+
+enum BenefitType {
+  AGE
+  SURVIVORS
+  INVALIDITY
+  WITHDRAWAL
+  MIDTERM
+  EMIGRATION
+  EXEMPTED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSED
+  FAILED
+  CANCELLED
+  REVERSED
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+  EXPIRED
+}
+
+enum MessageStatus {
+  UNREAD
+  READ
+  ARCHIVED
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
+  PASSWORD_CHANGE
+  PROFILE_UPDATE
+}
+
+// Models
+model Pensioners {
+  pensioner_id          String        @id @default(uuid()) @db.Uuid
+  nssf_number          String        @unique @db.VarChar(20)
+  national_id_number   String        @unique @db.VarChar(20)
+  first_name           String        @db.VarChar(100)
+  middle_name          String?       @db.VarChar(100)
+  last_name            String        @db.VarChar(100)
+  date_of_birth        DateTime      @db.Date
+  gender               String?       @db.Char(1)
+  nationality          String        @default("Ugandan") @db.VarChar(50)
+  
+  // Contact Information
+  phone_number         String?       @db.VarChar(20)
+  email_address        String?       @db.VarChar(255)
+  postal_address       String?       @db.Text
+  physical_address     String?       @db.Text
+  district             String?       @db.VarChar(100)
+  region               String?       @db.VarChar(100)
+  
+  // Employment Information
+  last_employer        String?       @db.VarChar(255)
+  employment_start_date DateTime?    @db.Date
+  employment_end_date  DateTime?     @db.Date
+  total_service_years  Decimal?      @db.Decimal(5,2)
+  
+  // Banking Information
+  bank_name            String?       @db.VarChar(100)
+  bank_account_number  String?       @db.VarChar(50)
+  bank_branch          String?       @db.VarChar(100)
+  
+  // Status and Metadata
+  pension_status       PensionStatus @default(PENDING)
+  registration_date    DateTime      @default(now())
+  last_updated         DateTime      @default(now()) @updatedAt
+  profile_photo_url    String?       @db.VarChar(500)
+  
+  // Verification
+  is_verified          Boolean       @default(false)
+  verification_date    DateTime?
+  verified_by          String?       @db.Uuid
+  
+  // Soft delete
+  is_deleted           Boolean       @default(false)
+  deleted_at           DateTime?
+  
+  // Relations
+  users                Users[]
+  benefits             Benefits[]
+  documents            Documents[]
+  messages_as_pensioner Messages[]
+  verification_requests VerificationRequests[]
+  audit_logs           AuditLogs[]
+
+  @@map("pensioners")
+}
+
+model Users {
+  user_id               String    @id @default(uuid()) @db.Uuid
+  pensioner_id          String?   @db.Uuid
+  username              String    @unique @db.VarChar(50)
+  password_hash         String    @db.VarChar(255)
+  role                  UserRole  @default(PENSIONER)
+  
+  // Security settings
+  is_active             Boolean   @default(true)
+  is_locked             Boolean   @default(false)
+  failed_login_attempts Int       @default(0)
+  last_login            DateTime?
+  password_last_changed DateTime  @default(now())
+  must_change_password  Boolean   @default(false)
+  
+  // Multi-factor authentication
+  mfa_enabled           Boolean   @default(false)
+  mfa_secret            String?   @db.VarChar(32)
+  backup_codes          String[]
+  
+  // Session management
+  current_session_token String?   @db.VarChar(255)
+  session_expires_at    DateTime?
+  refresh_token         String?   @db.VarChar(255)
+  refresh_token_expires_at DateTime?
+  
+  // Metadata
+  created_at            DateTime  @default(now())
+  updated_at            DateTime  @default(now()) @updatedAt
+  last_password_reset   DateTime?
+  
+  // Relations
+  pensioners            Pensioners? @relation(fields: [pensioner_id], references: [pensioner_id])
+  messages_sent         Messages[] @relation("MessageSender")
+  messages_received     Messages[] @relation("MessageRecipient")
+  notifications         Notifications[]
+  verification_requests_created VerificationRequests[] @relation("VerificationRequestor")
+  verification_requests_reviewed VerificationRequests[] @relation("VerificationReviewer")
+  audit_logs            AuditLogs[]
+  system_settings       SystemSettings[]
+
+  @@map("users")
+}
+
+model Benefits {
+  benefit_id            String      @id @default(uuid()) @db.Uuid
+  pensioner_id          String      @db.Uuid
+  benefit_type          BenefitType
+  
+  // Benefit calculation details
+  monthly_benefit_amount Decimal    @db.Decimal(15,2)
+  annual_benefit_amount  Decimal    @db.Decimal(15,2)
+  commutation_amount     Decimal?   @db.Decimal(15,2)
+  total_contributions    Decimal?   @db.Decimal(15,2)
+  interest_earned        Decimal?   @db.Decimal(15,2)
+  
+  // Benefit period
+  benefit_start_date     DateTime   @db.Date
+  benefit_end_date       DateTime?  @db.Date
+  next_review_date       DateTime?  @db.Date
+  
+  // Status and approval
+  is_active             Boolean     @default(true)
+  approved_by           String?     @db.Uuid
+  approval_date         DateTime?
+  approval_comments     String?     @db.Text
+  
+  // Metadata
+  created_at            DateTime    @default(now())
+  updated_at            DateTime    @default(now()) @updatedAt
+  
+  // Relations
+  pensioners            Pensioners  @relation(fields: [pensioner_id], references: [pensioner_id])
+  payments              Payments[]
+
+  @@map("benefits")
+}
+
+model Payments {
+  payment_id            String        @id @default(uuid()) @db.Uuid
+  benefit_id            String        @db.Uuid
+  
+  // Payment details
+  payment_amount        Decimal       @db.Decimal(15,2)
+  payment_date          DateTime      @db.Date
+  payment_period_start  DateTime      @db.Date
+  payment_period_end    DateTime      @db.Date
+  payment_method        String        @default("BANK_TRANSFER") @db.VarChar(50)
+  
+  // Bank transfer details
+  bank_reference_number String?       @db.VarChar(100)
+  transaction_reference String?       @db.VarChar(100)
+  
+  // Status tracking
+  payment_status        PaymentStatus @default(PENDING)
+  initiated_date        DateTime      @default(now())
+  processed_date        DateTime?
+  failed_reason         String?       @db.Text
+  
+  // Processing information
+  processed_by          String?       @db.Uuid
+  batch_id              String?       @db.VarChar(50)
+  
+  // Accounting
+  debit_account         String?       @db.VarChar(20)
+  credit_account        String?       @db.VarChar(20)
+  
+  // Metadata
+  created_at            DateTime      @default(now())
+  updated_at            DateTime      @default(now()) @updatedAt
+  
+  // Relations
+  benefits              Benefits      @relation(fields: [benefit_id], references: [benefit_id])
+
+  @@map("payments")
+}
+
+model Documents {
+  document_id           String      @id @default(uuid()) @db.Uuid
+  pensioner_id          String      @db.Uuid
+  
+  // Document details
+  document_name         String      @db.VarChar(255)
+  document_type         String      @db.VarChar(50)
+  document_category     String?     @db.VarChar(50)
+  file_path             String?     @db.VarChar(500)
+  file_size             BigInt?
+  mime_type             String?     @db.VarChar(100)
+  
+  // Document metadata
+  document_date         DateTime?   @db.Date
+  is_public             Boolean     @default(false)
+  download_count        Int         @default(0)
+  
+  // Security
+  is_encrypted          Boolean     @default(true)
+  encryption_key        String?     @db.VarChar(255)
+  
+  // Metadata
+  uploaded_by           String?     @db.Uuid
+  created_at            DateTime    @default(now())
+  updated_at            DateTime    @default(now()) @updatedAt
+  
+  // Relations
+  pensioners            Pensioners  @relation(fields: [pensioner_id], references: [pensioner_id])
+
+  @@map("documents")
+}
+
+model Messages {
+  message_id            String        @id @default(uuid()) @db.Uuid
+  
+  // Participants
+  sender_id             String        @db.Uuid
+  recipient_id          String        @db.Uuid
+  pensioner_id          String        @db.Uuid
+  
+  // Message content
+  subject               String        @db.VarChar(255)
+  message_body          String        @db.Text
+  attachment_ids        String[]      @db.Uuid
+  
+  // Threading
+  parent_message_id     String?       @db.Uuid
+  thread_id             String?       @db.Uuid
+  
+  // Status tracking
+  message_status        MessageStatus @default(UNREAD)
+  is_urgent             Boolean       @default(false)
+  
+  // Timestamps
+  sent_at               DateTime      @default(now())
+  read_at               DateTime?
+  archived_at           DateTime?
+  
+  // Metadata
+  created_at            DateTime      @default(now())
+  updated_at            DateTime      @default(now()) @updatedAt
+  
+  // Relations
+  sender                Users         @relation("MessageSender", fields: [sender_id], references: [user_id])
+  recipient             Users         @relation("MessageRecipient", fields: [recipient_id], references: [user_id])
+  pensioners            Pensioners    @relation(fields: [pensioner_id], references: [pensioner_id])
+  parent_message        Messages?     @relation("MessageThread", fields: [parent_message_id], references: [message_id])
+  replies               Messages[]    @relation("MessageThread")
+
+  @@map("messages")
+}
+
+model VerificationRequests {
+  request_id            String             @id @default(uuid()) @db.Uuid
+  pensioner_id          String             @db.Uuid
+  requested_by          String             @db.Uuid
+  
+  // Request details
+  request_type          String             @db.VarChar(50)
+  request_data          Json
+  current_data          Json?
+  
+  // Supporting documents
+  supporting_documents  String[]           @db.Uuid
+  
+  // Status and processing
+  verification_status   VerificationStatus @default(PENDING)
+  reviewed_by           String?            @db.Uuid
+  review_date           DateTime?
+  review_comments       String?            @db.Text
+  rejection_reason      String?            @db.Text
+  
+  // Metadata
+  created_at            DateTime           @default(now())
+  updated_at            DateTime           @default(now()) @updatedAt
+  expires_at            DateTime
+  
+  // Relations
+  pensioners            Pensioners         @relation(fields: [pensioner_id], references: [pensioner_id])
+  requestor             Users              @relation("VerificationRequestor", fields: [requested_by], references: [user_id])
+  reviewer              Users?             @relation("VerificationReviewer", fields: [reviewed_by], references: [user_id])
+
+  @@map("verification_requests")
+}
+
+model Notifications {
+  notification_id       String      @id @default(uuid()) @db.Uuid
+  user_id               String      @db.Uuid
+  
+  // Notification content
+  title                 String      @db.VarChar(255)
+  message               String      @db.Text
+  notification_type     String      @db.VarChar(50)
+  
+  // Targeting
+  is_global             Boolean     @default(false)
+  target_roles          UserRole[]
+  
+  // Status
+  is_read               Boolean     @default(false)
+  read_at               DateTime?
+  
+  // Delivery
+  delivery_method       String      @default("SYSTEM") @db.VarChar(50)
+  is_delivered          Boolean     @default(false)
+  delivered_at          DateTime?
+  
+  // Metadata
+  created_at            DateTime    @default(now())
+  expires_at            DateTime
+  
+  // Relations
+  users                 Users       @relation(fields: [user_id], references: [user_id])
+
+  @@map("notifications")
+}
+
+model AuditLogs {
+  log_id                String       @id @default(uuid()) @db.Uuid
+  
+  // Actor information
+  user_id               String?      @db.Uuid
+  pensioner_id          String?      @db.Uuid
+  session_id            String?      @db.VarChar(255)
+  
+  // Action details
+  action                AuditAction
+  table_name            String?      @db.VarChar(100)
+  record_id             String?      @db.Uuid
+  
+  // Change tracking
+  old_values            Json?
+  new_values            Json?
+  
+  // Request information
+  ip_address            String?
+  user_agent            String?      @db.Text
+  request_path          String?      @db.VarChar(500)
+  request_method        String?      @db.VarChar(10)
+  
+  // Metadata
+  timestamp             DateTime     @default(now())
+  description           String?      @db.Text
+  
+  // Relations
+  users                 Users?       @relation(fields: [user_id], references: [user_id])
+  pensioners            Pensioners?  @relation(fields: [pensioner_id], references: [pensioner_id])
+
+  @@map("audit_logs")
+}
+
+model SystemSettings {
+  setting_id            String      @id @default(uuid()) @db.Uuid
+  setting_key           String      @unique @db.VarChar(100)
+  setting_value         String?     @db.Text
+  setting_type          String      @default("STRING") @db.VarChar(20)
+  description           String?     @db.Text
+  is_sensitive          Boolean     @default(false)
+  category              String?     @db.VarChar(50)
+  
+  // Metadata
+  created_at            DateTime    @default(now())
+  updated_at            DateTime    @default(now()) @updatedAt
+  updated_by            String?     @db.Uuid
+  
+  // Relations
+  updater               Users?      @relation(fields: [updated_by], references: [user_id])
+
+  @@map("system_settings")
+}
