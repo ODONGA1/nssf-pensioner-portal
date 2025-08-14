@@ -204,10 +204,7 @@ Please refer to the [Contributing Guidelines](docs/CONTRIBUTING.md) for developm
 ## 📞 Support
 
 For technical support, contact the NSSF IT Department:
-
-- Email: it-support@nssfug.org
-- Phone: +256 312 234 400
-- Emergency: +256 800 286 773
+###############################################
 
 ---
 
