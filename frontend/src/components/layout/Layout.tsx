@@ -60,7 +60,8 @@ export const Layout: React.FC = () => {
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [notificationAnchorEl, setNotificationAnchorEl] = useState<null | HTMLElement>(null);
+  const [notificationAnchorEl, setNotificationAnchorEl] =
+    useState<null | HTMLElement>(null);
 
   // Mock notification data
   const notifications = [
@@ -98,7 +99,9 @@ export const Layout: React.FC = () => {
     },
   ];
 
-  const unreadNotifications = notifications.filter(notif => !notif.read).length;
+  const unreadNotifications = notifications.filter(
+    (notif) => !notif.read
+  ).length;
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -314,8 +317,8 @@ export const Layout: React.FC = () => {
           </Box>
 
           {/* Notifications */}
-          <IconButton 
-            color="inherit" 
+          <IconButton
+            color="inherit"
             sx={{ mr: 1 }}
             onClick={handleNotificationMenuOpen}
           >
@@ -367,21 +370,29 @@ export const Layout: React.FC = () => {
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             transformOrigin={{ vertical: "top", horizontal: "right" }}
             PaperProps={{
-              sx: { 
-                width: 380, 
-                maxHeight: 500, 
+              sx: {
+                width: 380,
+                maxHeight: 500,
                 mt: 1,
                 boxShadow: 3,
-              }
+              },
             }}
           >
-            <Box sx={{ p: 2, borderBottom: "1px solid", borderColor: "divider" }}>
-              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <Box
+              sx={{ p: 2, borderBottom: "1px solid", borderColor: "divider" }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <Typography variant="h6" fontWeight="bold">
                   Notifications
                 </Typography>
-                <IconButton 
-                  size="small" 
+                <IconButton
+                  size="small"
                   onClick={handleNotificationMenuClose}
                   sx={{ color: "text.secondary" }}
                 >
@@ -390,7 +401,8 @@ export const Layout: React.FC = () => {
               </Box>
               {unreadNotifications > 0 && (
                 <Typography variant="body2" color="text.secondary">
-                  You have {unreadNotifications} unread notification{unreadNotifications !== 1 ? 's' : ''}
+                  You have {unreadNotifications} unread notification
+                  {unreadNotifications !== 1 ? "s" : ""}
                 </Typography>
               )}
             </Box>
@@ -398,42 +410,50 @@ export const Layout: React.FC = () => {
             <Box sx={{ maxHeight: 350, overflow: "auto" }}>
               {notifications.length > 0 ? (
                 notifications.slice(0, 5).map((notification, index) => (
-                  <MenuItem 
+                  <MenuItem
                     key={notification.id}
                     onClick={handleNotificationMenuClose}
-                    sx={{ 
+                    sx={{
                       whiteSpace: "normal",
                       py: 2,
                       px: 2,
-                      backgroundColor: !notification.read ? "action.hover" : "transparent",
+                      backgroundColor: !notification.read
+                        ? "action.hover"
+                        : "transparent",
                       "&:hover": {
-                        backgroundColor: "action.selected"
-                      }
+                        backgroundColor: "action.selected",
+                      },
                     }}
                   >
                     <ListItemIcon sx={{ mr: 1 }}>
                       {getNotificationIcon(notification.type)}
                     </ListItemIcon>
                     <Box sx={{ flex: 1 }}>
-                      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                        <Typography 
-                          variant="subtitle2" 
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "flex-start",
+                        }}
+                      >
+                        <Typography
+                          variant="subtitle2"
                           fontWeight={!notification.read ? "bold" : "medium"}
                           sx={{ mb: 0.5 }}
                         >
                           {notification.title}
                         </Typography>
                         {!notification.read && (
-                          <Badge 
-                            color="primary" 
-                            variant="dot" 
+                          <Badge
+                            color="primary"
+                            variant="dot"
                             sx={{ mt: 0.5, ml: 1 }}
                           />
                         )}
                       </Box>
-                      <Typography 
-                        variant="body2" 
-                        color="text.secondary" 
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
                         sx={{ mb: 1 }}
                       >
                         {notification.message}
@@ -446,7 +466,9 @@ export const Layout: React.FC = () => {
                 ))
               ) : (
                 <Box sx={{ p: 3, textAlign: "center" }}>
-                  <Notifications sx={{ fontSize: 48, color: "text.disabled", mb: 2 }} />
+                  <Notifications
+                    sx={{ fontSize: 48, color: "text.disabled", mb: 2 }}
+                  />
                   <Typography variant="body2" color="text.secondary">
                     No notifications yet
                   </Typography>
@@ -455,13 +477,15 @@ export const Layout: React.FC = () => {
             </Box>
 
             {notifications.length > 0 && (
-              <Box sx={{ p: 2, borderTop: "1px solid", borderColor: "divider" }}>
-                <MenuItem 
+              <Box
+                sx={{ p: 2, borderTop: "1px solid", borderColor: "divider" }}
+              >
+                <MenuItem
                   onClick={handleViewAllNotifications}
-                  sx={{ 
+                  sx={{
                     justifyContent: "center",
                     fontWeight: "medium",
-                    color: "primary.main"
+                    color: "primary.main",
                   }}
                 >
                   View All Notifications
