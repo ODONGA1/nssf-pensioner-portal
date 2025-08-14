@@ -2,7 +2,7 @@
   "name": "nssf-pensioner-frontend",
   "version": "1.0.0",
   "description": "Frontend React application for NSSF Pensioner Self-Service Portal",
-  "homepage": ".",
+  "homepage": "https://ODONGA1.github.io/nssf-pensioner-portal",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -40,7 +40,9 @@
     "eject": "react-scripts eject",
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint:fix": "eslint src/**/*.{ts,tsx} --fix",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -64,7 +66,8 @@
     "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^6.2.0",
     "@typescript-eslint/parser": "^6.2.0",
-    "eslint": "^8.45.0"
+    "eslint": "^8.45.0",
+    "gh-pages": "^6.3.0"
   },
   "proxy": "http://localhost:5000"
 }

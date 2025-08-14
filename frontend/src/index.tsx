@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -48,11 +48,11 @@ root.render(
                 horizontal: "right",
               }}
             >
-              <BrowserRouter>
+              <HashRouter>
                 <AuthProvider>
                   <App />
                 </AuthProvider>
-              </BrowserRouter>
+              </HashRouter>
             </SnackbarProvider>
           </ThemeProvider>
         </QueryClientProvider>
