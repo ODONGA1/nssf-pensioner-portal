@@ -35,10 +35,10 @@ import {
   CheckCircle,
   Savings,
   Add,
-  Flag,
+  ArrowForward,
 } from "@mui/icons-material";
 import { useAuth } from "../../contexts/AuthContext";
-import DepositModal from "../../components/DepositModal";
+import SmartLifeDepositModal from "../../components/smartlife/SmartLifeDepositModal";
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
@@ -46,6 +46,47 @@ const DashboardPage: React.FC = () => {
 
   // Modal state
   const [depositModalOpen, setDepositModalOpen] = useState(false);
+
+  // Sample goals data for the deposit modal
+  const availableGoals = [
+    {
+      id: "1",
+      title: "Emergency Fund",
+      targetAmount: 5000000,
+      currentAmount: 2850000,
+      description: "Emergency fund for unexpected expenses",
+      deadline: "2026-12-31",
+      priority: "High" as const,
+    },
+    {
+      id: "2",
+      title: "House Down Payment",
+      targetAmount: 15000000,
+      currentAmount: 3200000,
+      description: "Down payment for new family home",
+      deadline: "2027-06-30",
+      priority: "Medium" as const,
+    },
+    {
+      id: "3",
+      title: "Children's Education",
+      targetAmount: 8000000,
+      currentAmount: 1500000,
+      description: "University education fund for children",
+      deadline: "2030-01-01",
+      priority: "High" as const,
+    },
+  ];
+
+  const handleDeposit = (
+    amount: number,
+    method: string,
+    goalAllocations?: any[]
+  ) => {
+    // Handle successful deposit
+    console.log(`Deposit successful: ${amount} via ${method}`, goalAllocations);
+    setDepositModalOpen(false);
+  };
 
   // Mock data for demonstration
   const pensionData = {
@@ -208,7 +249,7 @@ NSSF Uganda - Plot 101, Jinja Road, Kampala - Tel: +256 312 234 400`;
   };
 
   const handleViewSavings = () => {
-    navigate("/benefits?tab=savings"); // Navigate to benefits page with savings tab
+    navigate("/voluntary-savings"); // Navigate to voluntary savings page
   };
 
   const handleViewAllTransactions = () => {
@@ -362,233 +403,194 @@ Tel: +256 312 234 400 | Email: info@nssfug.org`;
           </Card>
         </Grid>
 
-        {/* Voluntary Savings Cards - Half Size */}
-        {/* Main Voluntary Savings Card */}
-        <Grid item xs={12} md={3} lg={3}>
+        {/* Enhanced Voluntary Savings Card - Full Width */}
+        <Grid item xs={12}>
           <Card
-            elevation={2}
+            elevation={3}
             sx={{
               background: "linear-gradient(135deg, #6366F1, #8B5CF6)",
               color: "white",
               cursor: "pointer",
               transition: "all 0.3s ease",
               border: "1px solid rgba(255, 255, 255, 0.1)",
-              borderRadius: "12px",
-              height: "80px",
+              borderRadius: "16px",
+              height: "85px", // Further reduced height
               "&:hover": {
                 transform: "translateY(-2px)",
-                boxShadow: "0 8px 16px rgba(99, 102, 241, 0.25)",
+                boxShadow: "0 8px 16px rgba(99, 102, 241, 0.3)",
                 background: "linear-gradient(135deg, #5B21B6, #7C3AED)",
               },
             }}
             onClick={handleViewSavings}
           >
             <CardContent
-              sx={{
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-                p: 1.5,
-              }}
+              sx={{ p: 1.5, height: "100%", "&:last-child": { pb: 1.5 } }}
             >
-              <Box
-                sx={{
-                  background: "rgba(255, 255, 255, 0.2)",
-                  borderRadius: "8px",
-                  p: 0.5,
-                  mr: 1.5,
-                }}
+              <Grid
+                container
+                spacing={1.5}
+                alignItems="center"
+                sx={{ height: "100%" }}
               >
-                <Savings sx={{ fontSize: 20, color: "white" }} />
-              </Box>
-              <Box sx={{ flex: 1 }}>
-                <Typography
-                  variant="caption"
-                  sx={{ fontWeight: 500, display: "block" }}
-                >
-                  Voluntary Savings
-                </Typography>
-                <Typography variant="h6" fontWeight="bold">
-                  {formatCurrency(savingsData.balance)}
-                </Typography>
-                <Typography
-                  variant="caption"
-                  sx={{ fontSize: "0.7rem", opacity: 0.9 }}
-                >
-                  +{savingsData.monthlyGrowth}% this month
-                </Typography>
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
+                {/* Main Balance Section */}
+                <Grid item xs={12} md={4}>
+                  <Box display="flex" alignItems="center">
+                    <Box
+                      sx={{
+                        background: "rgba(255, 255, 255, 0.2)",
+                        borderRadius: "8px",
+                        p: 0.75,
+                        mr: 1.5,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Savings sx={{ fontSize: 22, color: "white" }} />
+                    </Box>
+                    <Box>
+                      <Typography
+                        variant="h5"
+                        fontWeight="bold"
+                        sx={{ lineHeight: 1.2 }}
+                      >
+                        {formatCurrency(savingsData.balance)}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ opacity: 0.9, lineHeight: 1.1 }}
+                      >
+                        Voluntary Savings (+{savingsData.monthlyGrowth}%)
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Grid>
 
-        {/* Goal Progress - Half Size */}
-        <Grid item xs={12} md={3} lg={3}>
-          <Card
-            elevation={1}
-            sx={{
-              height: "80px",
-              background: "rgba(99, 102, 241, 0.03)",
-              border: "1px solid rgba(99, 102, 241, 0.08)",
-              borderRadius: "8px",
-              transition: "all 0.3s ease",
-              "&:hover": {
-                transform: "translateY(-1px)",
-                boxShadow: "0 2px 8px rgba(99, 102, 241, 0.1)",
-              },
-            }}
-          >
-            <CardContent
-              sx={{
-                p: 1.5,
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <Box
-                sx={{
-                  background: "rgba(99, 102, 241, 0.1)",
-                  borderRadius: "8px",
-                  p: 0.5,
-                  mr: 1.5,
-                }}
-              >
-                <Flag sx={{ fontSize: 16, color: "#6366F1" }} />
-              </Box>
-              <Box sx={{ flex: 1 }}>
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  display="block"
-                >
-                  Goal Progress
-                </Typography>
-                <Typography variant="h6" fontWeight="bold" color="#6366F1">
-                  {savingsData.goalProgress.toFixed(1)}%
-                </Typography>
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  sx={{ fontSize: "0.7rem" }}
-                >
-                  of target
-                </Typography>
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
+                {/* Compact Statistics Grid */}
+                <Grid item xs={12} md={6}>
+                  <Grid container spacing={0.5}>
+                    {/* Goal Progress */}
+                    <Grid item xs={3}>
+                      <Box textAlign="center">
+                        <Typography
+                          variant="h6"
+                          fontWeight="bold"
+                          sx={{ fontSize: "1rem", lineHeight: 1.2 }}
+                        >
+                          {savingsData.goalProgress.toFixed(1)}%
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            opacity: 0.8,
+                            fontSize: "0.7rem",
+                            lineHeight: 1,
+                          }}
+                        >
+                          Goal Progress
+                        </Typography>
+                      </Box>
+                    </Grid>
 
-        {/* Last Deposit - Half Size */}
-        <Grid item xs={12} md={3} lg={3}>
-          <Card
-            elevation={1}
-            sx={{
-              height: "80px",
-              background: "rgba(0, 0, 0, 0.01)",
-              border: "1px solid rgba(0, 0, 0, 0.06)",
-              borderRadius: "8px",
-              transition: "all 0.3s ease",
-              "&:hover": {
-                transform: "translateY(-1px)",
-                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
-              },
-            }}
-          >
-            <CardContent
-              sx={{
-                p: 1.5,
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <Box
-                sx={{
-                  background: "rgba(0, 0, 0, 0.05)",
-                  borderRadius: "8px",
-                  p: 0.5,
-                  mr: 1.5,
-                }}
-              >
-                <Add sx={{ fontSize: 16, color: "text.secondary" }} />
-              </Box>
-              <Box sx={{ flex: 1 }}>
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  display="block"
-                >
-                  Last Deposit
-                </Typography>
-                <Typography variant="h6" fontWeight="bold" color="text.primary">
-                  {formatCurrency(savingsData.lastDeposit.amount)}
-                </Typography>
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  sx={{ fontSize: "0.7rem" }}
-                >
-                  {savingsData.lastDeposit.date}
-                </Typography>
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
+                    {/* Last Deposit */}
+                    <Grid item xs={3}>
+                      <Box textAlign="center">
+                        <Typography
+                          variant="h6"
+                          fontWeight="bold"
+                          sx={{ fontSize: "1rem", lineHeight: 1.2 }}
+                        >
+                          {formatCurrency(savingsData.lastDeposit.amount)}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            opacity: 0.8,
+                            fontSize: "0.7rem",
+                            lineHeight: 1,
+                          }}
+                        >
+                          Last Deposit
+                        </Typography>
+                      </Box>
+                    </Grid>
 
-        {/* Interest Earned - Half Size */}
-        <Grid item xs={12} md={3} lg={3}>
-          <Card
-            elevation={1}
-            sx={{
-              height: "80px",
-              background: "rgba(16, 185, 129, 0.03)",
-              border: "1px solid rgba(16, 185, 129, 0.08)",
-              borderRadius: "8px",
-              transition: "all 0.3s ease",
-              "&:hover": {
-                transform: "translateY(-1px)",
-                boxShadow: "0 2px 8px rgba(16, 185, 129, 0.1)",
-              },
-            }}
-          >
-            <CardContent
-              sx={{
-                p: 1.5,
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <Box
-                sx={{
-                  background: "rgba(16, 185, 129, 0.1)",
-                  borderRadius: "8px",
-                  p: 0.5,
-                  mr: 1.5,
-                }}
-              >
-                <TrendingUp sx={{ fontSize: 16, color: "#10B981" }} />
-              </Box>
-              <Box sx={{ flex: 1 }}>
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  display="block"
-                >
-                  Interest (2025)
-                </Typography>
-                <Typography variant="h6" fontWeight="bold" color="#10B981">
-                  {formatCurrency(savingsData.interestEarned)}
-                </Typography>
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  sx={{ fontSize: "0.7rem" }}
-                >
-                  earned
-                </Typography>
-              </Box>
+                    {/* Interest Earned */}
+                    <Grid item xs={3}>
+                      <Box textAlign="center">
+                        <Typography
+                          variant="h6"
+                          fontWeight="bold"
+                          sx={{ fontSize: "1rem", lineHeight: 1.2 }}
+                        >
+                          {formatCurrency(savingsData.interestEarned)}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            opacity: 0.8,
+                            fontSize: "0.7rem",
+                            lineHeight: 1,
+                          }}
+                        >
+                          Interest (2025)
+                        </Typography>
+                      </Box>
+                    </Grid>
+
+                    {/* Active Goals */}
+                    <Grid item xs={3}>
+                      <Box textAlign="center">
+                        <Typography
+                          variant="h6"
+                          fontWeight="bold"
+                          sx={{ fontSize: "1rem", lineHeight: 1.2 }}
+                        >
+                          3
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            opacity: 0.8,
+                            fontSize: "0.7rem",
+                            lineHeight: 1,
+                          }}
+                        >
+                          Active Goals
+                        </Typography>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+                {/* Quick Action Button */}
+                <Grid item xs={12} md={2}>
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    height="100%"
+                  >
+                    <Button
+                      variant="contained"
+                      size="small"
+                      sx={{
+                        bgcolor: "rgba(255, 255, 255, 0.2)",
+                        color: "white",
+                        px: 1.5,
+                        py: 0.5,
+                        minHeight: "32px",
+                        "&:hover": {
+                          bgcolor: "rgba(255, 255, 255, 0.3)",
+                        },
+                      }}
+                      endIcon={<ArrowForward />}
+                    >
+                      Manage
+                    </Button>
+                  </Box>
+                </Grid>
+              </Grid>
             </CardContent>
           </Card>
         </Grid>
@@ -795,10 +797,11 @@ Tel: +256 312 234 400 | Email: info@nssfug.org`;
       </Grid>
 
       {/* Deposit Modal */}
-      <DepositModal
+      <SmartLifeDepositModal
         open={depositModalOpen}
         onClose={() => setDepositModalOpen(false)}
-        currentBalance={savingsData.balance}
+        onDeposit={handleDeposit}
+        availableGoals={availableGoals}
       />
     </Box>
   );

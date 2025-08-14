@@ -7,6 +7,7 @@ import LoginPage from "./pages/auth/LoginPage";
 import DashboardPage from "./pages/dashboard/DashboardPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import BenefitsPage from "./pages/benefits/BenefitsPage";
+import VoluntarySavingsPage from "./pages/voluntary-savings/VoluntarySavingsPage";
 import PaymentsPage from "./pages/payments/PaymentsPage";
 import DocumentsPage from "./pages/documents/DocumentsPage";
 import MessagesPage from "./pages/messages/MessagesPage";
@@ -71,6 +72,7 @@ const App: React.FC = () => {
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="benefits" element={<BenefitsPage />} />
+          <Route path="voluntary-savings" element={<VoluntarySavingsPage />} />
           <Route path="payments" element={<PaymentsPage />} />
           <Route path="documents" element={<DocumentsPage />} />
           <Route path="messages" element={<MessagesPage />} />
