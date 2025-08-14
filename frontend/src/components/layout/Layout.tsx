@@ -189,7 +189,10 @@ export const Layout: React.FC = () => {
       <Divider />
       <List sx={{ px: 1, py: 1 }}>
         <ListItem disablePadding>
-          <ListItemButton sx={{ borderRadius: 2, mx: 1 }}>
+          <ListItemButton 
+            sx={{ borderRadius: 2, mx: 1 }}
+            onClick={() => handleNavigation("/profile")}
+          >
             <ListItemIcon sx={{ color: "text.secondary", minWidth: 40 }}>
               <Settings />
             </ListItemIcon>
