@@ -33,6 +33,10 @@ import {
   Settings,
   Notifications,
   Security,
+  CheckCircle,
+  Warning,
+  Info,
+  Close,
 } from "@mui/icons-material";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -56,6 +60,45 @@ export const Layout: React.FC = () => {
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [notificationAnchorEl, setNotificationAnchorEl] = useState<null | HTMLElement>(null);
+
+  // Mock notification data
+  const notifications = [
+    {
+      id: "notif-001",
+      title: "Payment Processed",
+      message: "Your pension payment has been successfully processed",
+      date: "2025-08-14",
+      type: "success",
+      read: false,
+    },
+    {
+      id: "notif-002",
+      title: "Profile Update Required",
+      message: "Please update your contact information",
+      date: "2025-08-13",
+      type: "warning",
+      read: false,
+    },
+    {
+      id: "notif-003",
+      title: "System Maintenance",
+      message: "Scheduled maintenance on August 20th from 2:00 AM to 6:00 AM",
+      date: "2025-08-12",
+      type: "info",
+      read: true,
+    },
+    {
+      id: "notif-004",
+      title: "New Feature Available",
+      message: "Voluntary savings feature is now available",
+      date: "2025-08-11",
+      type: "feature",
+      read: true,
+    },
+  ];
+
+  const unreadNotifications = notifications.filter(notif => !notif.read).length;
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -67,6 +110,34 @@ export const Layout: React.FC = () => {
 
   const handleProfileMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleNotificationMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setNotificationAnchorEl(event.currentTarget);
+  };
+
+  const handleNotificationMenuClose = () => {
+    setNotificationAnchorEl(null);
+  };
+
+  const handleViewAllNotifications = () => {
+    navigate("/messages");
+    handleNotificationMenuClose();
+  };
+
+  const getNotificationIcon = (type: string) => {
+    switch (type) {
+      case "success":
+        return <CheckCircle color="success" />;
+      case "warning":
+        return <Warning color="warning" />;
+      case "info":
+        return <Info color="primary" />;
+      case "feature":
+        return <Notifications color="primary" />;
+      default:
+        return <Info color="primary" />;
+    }
   };
 
   const handleLogout = () => {
@@ -243,8 +314,12 @@ export const Layout: React.FC = () => {
           </Box>
 
           {/* Notifications */}
-          <IconButton color="inherit" sx={{ mr: 1 }}>
-            <Badge badgeContent={3} color="error">
+          <IconButton 
+            color="inherit" 
+            sx={{ mr: 1 }}
+            onClick={handleNotificationMenuOpen}
+          >
+            <Badge badgeContent={unreadNotifications} color="error">
               <Notifications />
             </Badge>
           </IconButton>
@@ -282,6 +357,117 @@ export const Layout: React.FC = () => {
               </ListItemIcon>
               Logout
             </MenuItem>
+          </Menu>
+
+          {/* Notifications Menu */}
+          <Menu
+            anchorEl={notificationAnchorEl}
+            open={Boolean(notificationAnchorEl)}
+            onClose={handleNotificationMenuClose}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            transformOrigin={{ vertical: "top", horizontal: "right" }}
+            PaperProps={{
+              sx: { 
+                width: 380, 
+                maxHeight: 500, 
+                mt: 1,
+                boxShadow: 3,
+              }
+            }}
+          >
+            <Box sx={{ p: 2, borderBottom: "1px solid", borderColor: "divider" }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <Typography variant="h6" fontWeight="bold">
+                  Notifications
+                </Typography>
+                <IconButton 
+                  size="small" 
+                  onClick={handleNotificationMenuClose}
+                  sx={{ color: "text.secondary" }}
+                >
+                  <Close />
+                </IconButton>
+              </Box>
+              {unreadNotifications > 0 && (
+                <Typography variant="body2" color="text.secondary">
+                  You have {unreadNotifications} unread notification{unreadNotifications !== 1 ? 's' : ''}
+                </Typography>
+              )}
+            </Box>
+
+            <Box sx={{ maxHeight: 350, overflow: "auto" }}>
+              {notifications.length > 0 ? (
+                notifications.slice(0, 5).map((notification, index) => (
+                  <MenuItem 
+                    key={notification.id}
+                    onClick={handleNotificationMenuClose}
+                    sx={{ 
+                      whiteSpace: "normal",
+                      py: 2,
+                      px: 2,
+                      backgroundColor: !notification.read ? "action.hover" : "transparent",
+                      "&:hover": {
+                        backgroundColor: "action.selected"
+                      }
+                    }}
+                  >
+                    <ListItemIcon sx={{ mr: 1 }}>
+                      {getNotificationIcon(notification.type)}
+                    </ListItemIcon>
+                    <Box sx={{ flex: 1 }}>
+                      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                        <Typography 
+                          variant="subtitle2" 
+                          fontWeight={!notification.read ? "bold" : "medium"}
+                          sx={{ mb: 0.5 }}
+                        >
+                          {notification.title}
+                        </Typography>
+                        {!notification.read && (
+                          <Badge 
+                            color="primary" 
+                            variant="dot" 
+                            sx={{ mt: 0.5, ml: 1 }}
+                          />
+                        )}
+                      </Box>
+                      <Typography 
+                        variant="body2" 
+                        color="text.secondary" 
+                        sx={{ mb: 1 }}
+                      >
+                        {notification.message}
+                      </Typography>
+                      <Typography variant="caption" color="text.disabled">
+                        {notification.date}
+                      </Typography>
+                    </Box>
+                  </MenuItem>
+                ))
+              ) : (
+                <Box sx={{ p: 3, textAlign: "center" }}>
+                  <Notifications sx={{ fontSize: 48, color: "text.disabled", mb: 2 }} />
+                  <Typography variant="body2" color="text.secondary">
+                    No notifications yet
+                  </Typography>
+                </Box>
+              )}
+            </Box>
+
+            {notifications.length > 0 && (
+              <Box sx={{ p: 2, borderTop: "1px solid", borderColor: "divider" }}>
+                <MenuItem 
+                  onClick={handleViewAllNotifications}
+                  sx={{ 
+                    justifyContent: "center",
+                    fontWeight: "medium",
+                    color: "primary.main"
+                  }}
+                >
+                  View All Notifications
+                </MenuItem>
+              </Box>
+            )}
           </Menu>
         </Toolbar>
       </AppBar>
