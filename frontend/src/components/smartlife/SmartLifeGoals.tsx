@@ -312,7 +312,16 @@ const SmartLifeGoals: React.FC<SmartLifeGoalsProps> = ({ onBack }) => {
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {activeGoals.map((goal) => (
           <Grid item xs={12} md={6} lg={4} key={goal.id}>
-            <Card sx={{ height: "100%" }}>
+            <Card
+              sx={{
+                height: "100%",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 8px 25px rgba(0,56,118,0.15)",
+                },
+              }}
+            >
               <CardContent>
                 <Box
                   display="flex"
@@ -323,9 +332,10 @@ const SmartLifeGoals: React.FC<SmartLifeGoalsProps> = ({ onBack }) => {
                   <Box display="flex" alignItems="center" gap={1}>
                     <Avatar
                       sx={{
-                        bgcolor: `${getCategoryColor(goal.category)}.main`,
+                        background: "linear-gradient(135deg, #003876, #FF6B35)",
                         width: 40,
                         height: 40,
+                        boxShadow: "0 4px 12px rgba(0,56,118,0.3)",
                       }}
                     >
                       {getCategoryIcon(goal.category)}
@@ -337,7 +347,12 @@ const SmartLifeGoals: React.FC<SmartLifeGoalsProps> = ({ onBack }) => {
                       <Chip
                         label={goal.category}
                         size="small"
-                        color={getCategoryColor(goal.category) as any}
+                        sx={{
+                          bgcolor: "rgba(255,107,53,0.1)",
+                          color: "#FF6B35",
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
                       />
                     </Box>
                   </Box>

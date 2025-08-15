@@ -150,12 +150,21 @@ const ProfilePage: React.FC = () => {
           component="h1"
           gutterBottom
           fontWeight="bold"
-          color="primary"
+          sx={{
+            background: "linear-gradient(45deg, #003876, #FF6B35)",
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
         >
           Profile Management
         </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Manage your personal information and account preferences
+        <Typography
+          variant="body1"
+          color="text.secondary"
+          sx={{ fontSize: "1.1rem" }}
+        >
+          Manage your personal information and NSSF account preferences
         </Typography>
       </Box>
 
@@ -169,9 +178,10 @@ const ProfilePage: React.FC = () => {
                   sx={{
                     width: 120,
                     height: 120,
-                    bgcolor: "primary.main",
+                    background: "linear-gradient(135deg, #003876, #FF6B35)",
                     fontSize: "2rem",
                     fontWeight: "bold",
+                    boxShadow: "0 8px 24px rgba(0,56,118,0.3)",
                   }}
                 >
                   {userProfile.personalInfo.firstName[0]}

@@ -266,21 +266,32 @@ const VoluntarySavingsPage: React.FC = () => {
         {/* Enhanced Header */}
         <Card
           sx={{
-            background: "linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)",
+            background: "linear-gradient(135deg, #003876 0%, #FF6B35 100%)",
             color: "white",
             mb: 3,
             position: "relative",
             overflow: "hidden",
+            boxShadow: "0 8px 32px rgba(0,56,118,0.3)",
             "&::before": {
               content: '""',
               position: "absolute",
               top: 0,
               right: 0,
-              width: "100px",
-              height: "100px",
+              width: "120px",
+              height: "120px",
               background: "rgba(255, 255, 255, 0.1)",
               borderRadius: "50%",
               transform: "translate(50%, -50%)",
+            },
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              bottom: -30,
+              left: -30,
+              width: "100px",
+              height: "100px",
+              background: "rgba(255, 107, 53, 0.2)",
+              borderRadius: "50%",
             },
           }}
         >
@@ -290,13 +301,14 @@ const VoluntarySavingsPage: React.FC = () => {
                 <Box display="flex" alignItems="center" gap={3}>
                   <Avatar
                     sx={{
-                      bgcolor: "rgba(255, 255, 255, 0.2)",
+                      background: "rgba(255, 255, 255, 0.25)",
                       width: 80,
                       height: 80,
-                      border: "3px solid rgba(255, 255, 255, 0.3)",
+                      border: "3px solid rgba(255, 255, 255, 0.4)",
+                      boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
                     }}
                   >
-                    <Star sx={{ fontSize: 40 }} />
+                    <Star sx={{ fontSize: 40, color: "#FF6B35" }} />
                   </Avatar>
                   <Box>
                     <Typography variant="h3" fontWeight="bold" gutterBottom>
@@ -326,9 +338,13 @@ const VoluntarySavingsPage: React.FC = () => {
                   >
                     <Chip
                       label="Active"
-                      color="success"
                       size="small"
-                      sx={{ bgcolor: "rgba(76, 175, 80, 0.2)", color: "white" }}
+                      sx={{
+                        bgcolor: "rgba(255, 107, 53, 0.9)",
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: "0.75rem",
+                      }}
                     />
                     <Typography variant="body2" sx={{ opacity: 0.8 }}>
                       12.5% Annual Interest
@@ -369,14 +385,16 @@ const VoluntarySavingsPage: React.FC = () => {
                 onClick={() => setDepositModalOpen(true)}
                 sx={{
                   background:
-                    "linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)",
-                  boxShadow: "0 4px 15px rgba(25, 118, 210, 0.3)",
+                    "linear-gradient(135deg, #003876 0%, #1976d2 100%)",
+                  boxShadow: "0 4px 15px rgba(0,56,118, 0.3)",
                   py: 2,
                   fontSize: "1.1rem",
                   fontWeight: "bold",
                   "&:hover": {
-                    boxShadow: "0 6px 20px rgba(25, 118, 210, 0.4)",
+                    boxShadow: "0 6px 20px rgba(0,56,118, 0.4)",
                     transform: "translateY(-2px)",
+                    background:
+                      "linear-gradient(135deg, #001f3f 0%, #1565c0 100%)",
                   },
                   transition: "all 0.3s ease",
                 }}
@@ -392,18 +410,19 @@ const VoluntarySavingsPage: React.FC = () => {
                 startIcon={<MoneyOff />}
                 onClick={() => setWithdrawalModalOpen(true)}
                 sx={{
-                  borderColor: "#f57c00",
-                  color: "#f57c00",
+                  borderColor: "#FF6B35",
+                  color: "#FF6B35",
                   borderWidth: 2,
                   py: 2,
                   fontSize: "1.1rem",
                   fontWeight: "bold",
                   "&:hover": {
-                    borderColor: "#ef6c00",
-                    color: "#ef6c00",
-                    bgcolor: "rgba(245, 124, 0, 0.08)",
+                    borderColor: "#E5522F",
+                    color: "#E5522F",
+                    bgcolor: "rgba(255, 107, 53, 0.08)",
                     borderWidth: 2,
                     transform: "translateY(-2px)",
+                    boxShadow: "0 4px 12px rgba(255, 107, 53, 0.3)",
                   },
                   transition: "all 0.3s ease",
                 }}
@@ -417,11 +436,37 @@ const VoluntarySavingsPage: React.FC = () => {
         {/* Key Metrics Dashboard */}
         <Grid container spacing={3} sx={{ mb: 4 }}>
           <Grid item xs={6} sm={3}>
-            <Card sx={{ textAlign: "center", p: 2 }}>
-              <Avatar sx={{ bgcolor: "primary.main", mx: "auto", mb: 1 }}>
+            <Card
+              sx={{
+                textAlign: "center",
+                p: 2,
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 8px 25px rgba(0,56,118,0.15)",
+                },
+              }}
+            >
+              <Avatar
+                sx={{
+                  background: "linear-gradient(135deg, #003876, #1976d2)",
+                  mx: "auto",
+                  mb: 1,
+                  boxShadow: "0 4px 12px rgba(0,56,118,0.3)",
+                }}
+              >
                 <TrendingUp />
               </Avatar>
-              <Typography variant="h6" fontWeight="bold" color="primary.main">
+              <Typography
+                variant="h6"
+                fontWeight="bold"
+                sx={{
+                  background: "linear-gradient(45deg, #003876, #FF6B35)",
+                  backgroundClip: "text",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
                 {formatCurrency(accountData.monthlyInterest)}
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -430,11 +475,37 @@ const VoluntarySavingsPage: React.FC = () => {
             </Card>
           </Grid>
           <Grid item xs={6} sm={3}>
-            <Card sx={{ textAlign: "center", p: 2 }}>
-              <Avatar sx={{ bgcolor: "success.main", mx: "auto", mb: 1 }}>
+            <Card
+              sx={{
+                textAlign: "center",
+                p: 2,
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 8px 25px rgba(255,107,53,0.15)",
+                },
+              }}
+            >
+              <Avatar
+                sx={{
+                  background: "linear-gradient(135deg, #FF6B35, #E5522F)",
+                  mx: "auto",
+                  mb: 1,
+                  boxShadow: "0 4px 12px rgba(255,107,53,0.3)",
+                }}
+              >
                 <Savings />
               </Avatar>
-              <Typography variant="h6" fontWeight="bold" color="success.main">
+              <Typography
+                variant="h6"
+                fontWeight="bold"
+                sx={{
+                  background: "linear-gradient(45deg, #FF6B35, #003876)",
+                  backgroundClip: "text",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
                 {accountData.activeGoals}
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -443,11 +514,37 @@ const VoluntarySavingsPage: React.FC = () => {
             </Card>
           </Grid>
           <Grid item xs={6} sm={3}>
-            <Card sx={{ textAlign: "center", p: 2 }}>
-              <Avatar sx={{ bgcolor: "info.main", mx: "auto", mb: 1 }}>
+            <Card
+              sx={{
+                textAlign: "center",
+                p: 2,
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 8px 25px rgba(0,56,118,0.15)",
+                },
+              }}
+            >
+              <Avatar
+                sx={{
+                  background: "linear-gradient(135deg, #003876, #FF6B35)",
+                  mx: "auto",
+                  mb: 1,
+                  boxShadow: "0 4px 12px rgba(0,56,118,0.3)",
+                }}
+              >
                 <Add />
               </Avatar>
-              <Typography variant="h6" fontWeight="bold" color="info.main">
+              <Typography
+                variant="h6"
+                fontWeight="bold"
+                sx={{
+                  background: "linear-gradient(45deg, #003876, #FF6B35)",
+                  backgroundClip: "text",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
                 {formatCurrency(accountData.monthlyDeposits)}
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -456,11 +553,37 @@ const VoluntarySavingsPage: React.FC = () => {
             </Card>
           </Grid>
           <Grid item xs={6} sm={3}>
-            <Card sx={{ textAlign: "center", p: 2 }}>
-              <Avatar sx={{ bgcolor: "warning.main", mx: "auto", mb: 1 }}>
+            <Card
+              sx={{
+                textAlign: "center",
+                p: 2,
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 8px 25px rgba(255,107,53,0.15)",
+                },
+              }}
+            >
+              <Avatar
+                sx={{
+                  background: "linear-gradient(135deg, #FF6B35, #003876)",
+                  mx: "auto",
+                  mb: 1,
+                  boxShadow: "0 4px 12px rgba(255,107,53,0.3)",
+                }}
+              >
                 <CheckCircle />
               </Avatar>
-              <Typography variant="h6" fontWeight="bold" color="warning.main">
+              <Typography
+                variant="h6"
+                fontWeight="bold"
+                sx={{
+                  background: "linear-gradient(45deg, #FF6B35, #003876)",
+                  backgroundClip: "text",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
                 {formatCurrency(accountData.interestEarned)}
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -471,7 +594,7 @@ const VoluntarySavingsPage: React.FC = () => {
         </Grid>
 
         {/* Enhanced Tab Navigation */}
-        <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
+        <Box sx={{ borderBottom: 2, borderColor: "#FF6B35", mb: 3 }}>
           <Tabs
             value={tabValue}
             onChange={handleTabChange}
@@ -482,7 +605,22 @@ const VoluntarySavingsPage: React.FC = () => {
               "& .MuiTab-root": {
                 minHeight: 64,
                 fontSize: "1rem",
-                fontWeight: 500,
+                fontWeight: 600,
+                color: "#757575",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  color: "#FF6B35",
+                  transform: "translateY(-1px)",
+                },
+              },
+              "& .MuiTab-root.Mui-selected": {
+                color: "#003876",
+                fontWeight: "bold",
+              },
+              "& .MuiTabs-indicator": {
+                height: 3,
+                background: "linear-gradient(90deg, #003876, #FF6B35)",
+                borderRadius: "3px 3px 0 0",
               },
             }}
           >

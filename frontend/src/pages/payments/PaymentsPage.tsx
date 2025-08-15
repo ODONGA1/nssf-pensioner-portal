@@ -422,12 +422,21 @@ This is an official document.`;
           component="h1"
           gutterBottom
           fontWeight="bold"
-          color="primary"
+          sx={{
+            background: "linear-gradient(45deg, #003876, #FF6B35)",
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
         >
           Payment History
         </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Track your pension payments and manage payment preferences
+        <Typography
+          variant="body1"
+          color="text.secondary"
+          sx={{ fontSize: "1.1rem" }}
+        >
+          Track your NSSF pension payments and manage payment preferences
         </Typography>
       </Box>
 

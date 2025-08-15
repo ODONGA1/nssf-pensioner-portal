@@ -1,17 +1,17 @@
 import { createTheme } from "@mui/material/styles";
 
-// NSSF Brand Colors
+// NSSF Official Brand Colors - Based on nssfug.org
 const colors = {
   primary: {
-    main: "#1976d2", // NSSF Blue
-    light: "#42a5f5",
-    dark: "#1565c0",
+    main: "#003876", // NSSF Deep Blue (official primary)
+    light: "#1976d2",
+    dark: "#001f3f",
     contrastText: "#ffffff",
   },
   secondary: {
-    main: "#f57c00", // NSSF Orange
-    light: "#ff9800",
-    dark: "#e65100",
+    main: "#FF6B35", // NSSF Orange (official secondary)
+    light: "#FF8F65",
+    dark: "#E5522F",
     contrastText: "#ffffff",
   },
   error: {

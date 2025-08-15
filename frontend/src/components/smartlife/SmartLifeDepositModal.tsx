@@ -129,13 +129,29 @@ const SmartLifeDepositModal: React.FC<SmartLifeDepositModalProps> = ({
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>
         <Box display="flex" alignItems="center" gap={2}>
-          <Avatar sx={{ bgcolor: "primary.main" }}>
+          <Avatar
+            sx={{
+              background: "linear-gradient(135deg, #003876, #FF6B35)",
+              boxShadow: "0 4px 12px rgba(0,56,118,0.3)",
+            }}
+          >
             <Star />
           </Avatar>
           <Box>
-            <Typography variant="h6">SmartLife Flexi Deposit</Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                background: "linear-gradient(45deg, #003876, #FF6B35)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                fontWeight: "bold",
+              }}
+            >
+              SmartLife Flexi Deposit
+            </Typography>
             <Typography variant="body2" color="text.secondary">
-              Add funds to your voluntary savings account
+              Add funds to your NSSF voluntary savings account
             </Typography>
           </Box>
         </Box>
@@ -143,13 +159,27 @@ const SmartLifeDepositModal: React.FC<SmartLifeDepositModalProps> = ({
 
       <DialogContent>
         {/* Product Info */}
-        <Alert severity="info" sx={{ mb: 3 }}>
-          <Typography variant="subtitle2" gutterBottom>
-            SmartLife Flexi Benefits:
+        <Alert
+          severity="info"
+          sx={{
+            mb: 3,
+            bgcolor: "rgba(0,56,118,0.08)",
+            border: "1px solid rgba(0,56,118,0.2)",
+            "& .MuiAlert-icon": {
+              color: "#003876",
+            },
+          }}
+        >
+          <Typography
+            variant="subtitle2"
+            gutterBottom
+            sx={{ color: "#003876", fontWeight: "bold" }}
+          >
+            NSSF SmartLife Flexi Benefits:
           </Typography>
           <Typography variant="body2">
             12.5% annual interest • Daily accrual, monthly crediting • Minimum
-            UGX 5,000 deposit
+            UGX 5,000 deposit • Flexible goal-based savings
           </Typography>
         </Alert>
 
@@ -181,7 +211,31 @@ const SmartLifeDepositModal: React.FC<SmartLifeDepositModalProps> = ({
                             ? "filled"
                             : "outlined"
                         }
-                        color="primary"
+                        sx={{
+                          borderColor:
+                            amount === quickAmount.toString()
+                              ? "#003876"
+                              : "#FF6B35",
+                          backgroundColor:
+                            amount === quickAmount.toString()
+                              ? "#003876"
+                              : "transparent",
+                          color:
+                            amount === quickAmount.toString()
+                              ? "white"
+                              : "#FF6B35",
+                          fontWeight: "bold",
+                          "&:hover": {
+                            backgroundColor:
+                              amount === quickAmount.toString()
+                                ? "#001f3f"
+                                : "rgba(255,107,53,0.08)",
+                            borderColor:
+                              amount === quickAmount.toString()
+                                ? "#001f3f"
+                                : "#E5522F",
+                          },
+                        }}
                         clickable
                         onClick={() => setAmount(quickAmount.toString())}
                       />

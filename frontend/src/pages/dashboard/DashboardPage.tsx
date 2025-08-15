@@ -294,12 +294,21 @@ Tel: +256 312 234 400 | Email: info@nssfug.org`;
           component="h1"
           gutterBottom
           fontWeight="bold"
-          color="primary"
+          sx={{
+            background: "linear-gradient(45deg, #003876, #FF6B35)",
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
         >
           Welcome back, {user?.username || "Pensioner"}
         </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Here's an overview of your pension account and recent activities.
+        <Typography
+          variant="body1"
+          color="text.secondary"
+          sx={{ fontSize: "1.1rem" }}
+        >
+          Here's an overview of your NSSF pension account and recent activities.
         </Typography>
       </Box>
 
@@ -309,8 +318,13 @@ Tel: +256 312 234 400 | Email: info@nssfug.org`;
           <Card
             elevation={3}
             sx={{
-              background: "linear-gradient(135deg, #1B5E20, #4CAF50)",
+              background: "linear-gradient(135deg, #003876, #1976d2)",
               color: "white",
+              transition: "all 0.3s ease",
+              "&:hover": {
+                transform: "translateY(-4px)",
+                boxShadow: "0 12px 28px rgba(0,56,118,0.3)",
+              },
             }}
           >
             <CardContent>
@@ -326,22 +340,53 @@ Tel: +256 312 234 400 | Email: info@nssfug.org`;
               <Chip
                 label={pensionData.status}
                 size="small"
-                sx={{ bgcolor: "rgba(255,255,255,0.2)", color: "white" }}
+                sx={{
+                  bgcolor: "rgba(255, 107, 53, 0.9)",
+                  color: "white",
+                  fontWeight: "bold",
+                }}
               />
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} md={6} lg={3}>
-          <Card elevation={3}>
+          <Card
+            elevation={3}
+            sx={{
+              transition: "all 0.3s ease",
+              "&:hover": {
+                transform: "translateY(-4px)",
+                boxShadow: "0 12px 28px rgba(0,56,118,0.15)",
+              },
+            }}
+          >
             <CardContent>
               <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                <Payment sx={{ fontSize: 40, mr: 2, color: "primary.main" }} />
+                <Payment
+                  sx={{
+                    fontSize: 40,
+                    mr: 2,
+                    background: "linear-gradient(135deg, #003876, #FF6B35)",
+                    borderRadius: "50%",
+                    p: 1,
+                    color: "white",
+                  }}
+                />
                 <Box>
                   <Typography variant="h6" color="text.primary">
                     Monthly Pension
                   </Typography>
-                  <Typography variant="h4" fontWeight="bold" color="primary">
+                  <Typography
+                    variant="h4"
+                    fontWeight="bold"
+                    sx={{
+                      background: "linear-gradient(45deg, #003876, #FF6B35)",
+                      backgroundClip: "text",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }}
+                  >
                     {formatCurrency(pensionData.monthlyPension)}
                   </Typography>
                 </Box>
@@ -354,17 +399,42 @@ Tel: +256 312 234 400 | Email: info@nssfug.org`;
         </Grid>
 
         <Grid item xs={12} md={6} lg={3}>
-          <Card elevation={3}>
+          <Card
+            elevation={3}
+            sx={{
+              transition: "all 0.3s ease",
+              "&:hover": {
+                transform: "translateY(-4px)",
+                boxShadow: "0 12px 28px rgba(255,107,53,0.15)",
+              },
+            }}
+          >
             <CardContent>
               <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                 <CalendarToday
-                  sx={{ fontSize: 40, mr: 2, color: "info.main" }}
+                  sx={{
+                    fontSize: 40,
+                    mr: 2,
+                    background: "linear-gradient(135deg, #FF6B35, #E5522F)",
+                    borderRadius: "50%",
+                    p: 1,
+                    color: "white",
+                  }}
                 />
                 <Box>
                   <Typography variant="h6" color="text.primary">
                     Service Years
                   </Typography>
-                  <Typography variant="h4" fontWeight="bold" color="info.main">
+                  <Typography
+                    variant="h4"
+                    fontWeight="bold"
+                    sx={{
+                      background: "linear-gradient(45deg, #FF6B35, #003876)",
+                      backgroundClip: "text",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }}
+                  >
                     {pensionData.contributionYears}
                   </Typography>
                 </Box>
@@ -377,11 +447,27 @@ Tel: +256 312 234 400 | Email: info@nssfug.org`;
         </Grid>
 
         <Grid item xs={12} md={6} lg={3}>
-          <Card elevation={3}>
+          <Card
+            elevation={3}
+            sx={{
+              transition: "all 0.3s ease",
+              "&:hover": {
+                transform: "translateY(-4px)",
+                boxShadow: "0 12px 28px rgba(0,56,118,0.15)",
+              },
+            }}
+          >
             <CardContent>
               <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                 <TrendingUp
-                  sx={{ fontSize: 40, mr: 2, color: "success.main" }}
+                  sx={{
+                    fontSize: 40,
+                    mr: 2,
+                    background: "linear-gradient(135deg, #003876, #FF6B35)",
+                    borderRadius: "50%",
+                    p: 1,
+                    color: "white",
+                  }}
                 />
                 <Box>
                   <Typography variant="h6" color="text.primary">
@@ -390,7 +476,12 @@ Tel: +256 312 234 400 | Email: info@nssfug.org`;
                   <Typography
                     variant="h4"
                     fontWeight="bold"
-                    color="success.main"
+                    sx={{
+                      background: "linear-gradient(45deg, #003876, #FF6B35)",
+                      backgroundClip: "text",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }}
                   >
                     12.5%
                   </Typography>
@@ -408,7 +499,7 @@ Tel: +256 312 234 400 | Email: info@nssfug.org`;
           <Card
             elevation={3}
             sx={{
-              background: "linear-gradient(135deg, #6366F1, #8B5CF6)",
+              background: "linear-gradient(135deg, #003876, #FF6B35)",
               color: "white",
               cursor: "pointer",
               transition: "all 0.3s ease",
@@ -417,8 +508,8 @@ Tel: +256 312 234 400 | Email: info@nssfug.org`;
               height: "85px", // Further reduced height
               "&:hover": {
                 transform: "translateY(-2px)",
-                boxShadow: "0 8px 16px rgba(99, 102, 241, 0.3)",
-                background: "linear-gradient(135deg, #5B21B6, #7C3AED)",
+                boxShadow: "0 8px 16px rgba(0,56,118, 0.4)",
+                background: "linear-gradient(135deg, #001f3f, #E5522F)",
               },
             }}
             onClick={handleViewSavings}

@@ -167,40 +167,57 @@ export const Layout: React.FC = () => {
           textAlign: "center",
           bgcolor: "primary.main",
           color: "white",
+          background: "linear-gradient(135deg, #003876 0%, #1976d2 100%)",
         }}
       >
         <Box
           sx={{
-            width: 60,
-            height: 60,
-            borderRadius: "50%",
+            width: 70,
+            height: 70,
+            borderRadius: "12px",
             bgcolor: "white",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             mx: "auto",
             mb: 2,
+            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
           }}
         >
-          <Typography variant="h4" color="primary.main" fontWeight="bold">
-            N
+          <Typography
+            variant="h3"
+            sx={{
+              background: "linear-gradient(45deg, #003876, #FF6B35)",
+              backgroundClip: "text",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              fontWeight: "bold",
+            }}
+          >
+            NSSF
           </Typography>
         </Box>
-        <Typography variant="h6" fontWeight="bold">
-          NSSF Portal
+        <Typography variant="h6" fontWeight="bold" sx={{ mb: 0.5 }}>
+          NSSF Uganda
         </Typography>
-        <Typography variant="body2" sx={{ opacity: 0.9 }}>
-          Pensioner Services
+        <Typography variant="body2" sx={{ opacity: 0.9, fontSize: "0.85rem" }}>
+          Pensioner Self-Service Portal
         </Typography>
       </Box>
 
       <Divider />
 
       {/* User Info */}
-      <Box sx={{ p: 2, bgcolor: "grey.50" }}>
+      <Box sx={{ p: 2, bgcolor: "rgba(0,56,118,0.05)" }}>
         <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
           <Avatar
-            sx={{ bgcolor: "primary.main", mr: 2, width: 40, height: 40 }}
+            sx={{
+              background: "linear-gradient(45deg, #003876, #FF6B35)",
+              mr: 2,
+              width: 40,
+              height: 40,
+              fontWeight: "bold",
+            }}
           >
             {user?.username?.charAt(0).toUpperCase()}
           </Avatar>
@@ -211,8 +228,12 @@ export const Layout: React.FC = () => {
             <Chip
               label={user?.role || "PENSIONER"}
               size="small"
-              color="primary"
-              variant="outlined"
+              sx={{
+                bgcolor: "secondary.main",
+                color: "white",
+                fontWeight: "bold",
+                fontSize: "0.7rem",
+              }}
             />
           </Box>
         </Box>
@@ -234,9 +255,11 @@ export const Layout: React.FC = () => {
                   bgcolor: isActive ? "primary.main" : "transparent",
                   color: isActive ? "white" : "text.primary",
                   "&:hover": {
-                    bgcolor: isActive ? "primary.dark" : "primary.light",
+                    bgcolor: isActive ? "primary.dark" : "rgba(0,56,118,0.08)",
                     color: isActive ? "white" : "primary.main",
+                    transform: "translateX(4px)",
                   },
+                  transition: "all 0.3s ease",
                 }}
               >
                 <ListItemIcon
@@ -292,7 +315,8 @@ export const Layout: React.FC = () => {
           ml: { md: `${drawerWidth}px` },
           bgcolor: "white",
           color: "text.primary",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.12)",
+          boxShadow: "0 2px 8px rgba(0,56,118,0.1)",
+          borderBottom: "3px solid #FF6B35",
         }}
       >
         <Toolbar>
@@ -310,11 +334,17 @@ export const Layout: React.FC = () => {
             <Typography
               variant="h6"
               component="h1"
-              color="primary.main"
-              fontWeight="bold"
+              sx={{
+                background: "linear-gradient(45deg, #003876, #FF6B35)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                fontWeight: "bold",
+                fontSize: "1.1rem",
+              }}
             >
               {navigationItems.find((item) => item.path === location.pathname)
-                ?.text || "NSSF Portal"}
+                ?.text || "NSSF Uganda Portal"}
             </Typography>
           </Box>
 

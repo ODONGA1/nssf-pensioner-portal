@@ -258,14 +258,20 @@ const SmartLifeWithdrawalModal: React.FC<SmartLifeWithdrawalModalProps> = ({
     >
       <DialogTitle
         sx={{
-          background: "linear-gradient(135deg, #f57c00 0%, #ff9800 100%)",
+          background: "linear-gradient(135deg, #FF6B35 0%, #E5522F 100%)",
           color: "white",
           textAlign: "center",
           py: 3,
+          boxShadow: "0 4px 12px rgba(255,107,53,0.3)",
         }}
       >
         <Box display="flex" alignItems="center" justifyContent="center" gap={2}>
-          <Avatar sx={{ bgcolor: "rgba(255, 255, 255, 0.2)" }}>
+          <Avatar
+            sx={{
+              bgcolor: "rgba(255, 255, 255, 0.25)",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+            }}
+          >
             <MoneyOff />
           </Avatar>
           <Box>
@@ -273,7 +279,7 @@ const SmartLifeWithdrawalModal: React.FC<SmartLifeWithdrawalModalProps> = ({
               Withdraw Funds
             </Typography>
             <Typography variant="body2" sx={{ opacity: 0.9 }}>
-              SmartLife Voluntary Savings
+              NSSF SmartLife Voluntary Savings
             </Typography>
           </Box>
         </Box>
@@ -285,9 +291,9 @@ const SmartLifeWithdrawalModal: React.FC<SmartLifeWithdrawalModalProps> = ({
           <Grid item xs={12}>
             <Card
               sx={{
-                bgcolor: "primary.50",
+                bgcolor: "rgba(0,56,118,0.05)",
                 border: "1px solid",
-                borderColor: "primary.200",
+                borderColor: "rgba(0,56,118,0.2)",
               }}
             >
               <CardContent sx={{ py: 2 }}>
@@ -302,7 +308,12 @@ const SmartLifeWithdrawalModal: React.FC<SmartLifeWithdrawalModalProps> = ({
                   <Typography
                     variant="h6"
                     fontWeight="bold"
-                    color="primary.main"
+                    sx={{
+                      background: "linear-gradient(45deg, #003876, #FF6B35)",
+                      backgroundClip: "text",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }}
                   >
                     {formatCurrency(availableBalance)}
                   </Typography>

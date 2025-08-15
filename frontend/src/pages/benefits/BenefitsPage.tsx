@@ -221,26 +221,59 @@ For official verification, contact NSSF at +256 312 234 400`;
           component="h1"
           gutterBottom
           fontWeight="bold"
-          color="primary"
+          sx={{
+            background: "linear-gradient(45deg, #003876, #FF6B35)",
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
         >
           Benefits Overview
         </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Detailed information about your pension benefits and contributions
+        <Typography
+          variant="body1"
+          color="text.secondary"
+          sx={{ fontSize: "1.1rem" }}
+        >
+          Detailed information about your NSSF pension benefits and
+          contributions
         </Typography>
       </Box>
 
       {/* Benefits Summary Cards */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid item xs={12} md={6} lg={3}>
-          <Card elevation={3}>
+          <Card
+            elevation={3}
+            sx={{
+              transition: "all 0.3s ease",
+              "&:hover": {
+                transform: "translateY(-4px)",
+                boxShadow: "0 12px 28px rgba(0,56,118,0.15)",
+              },
+            }}
+          >
             <CardContent>
               <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                <Avatar sx={{ bgcolor: "primary.main", mr: 2 }}>
+                <Avatar
+                  sx={{
+                    background: "linear-gradient(135deg, #003876, #1976d2)",
+                    mr: 2,
+                    boxShadow: "0 4px 12px rgba(0,56,118,0.3)",
+                  }}
+                >
                   <AccountBalance />
                 </Avatar>
                 <Box>
-                  <Typography variant="h6" color="primary">
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      background: "linear-gradient(45deg, #003876, #FF6B35)",
+                      backgroundClip: "text",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }}
+                  >
                     Total Balance
                   </Typography>
                   <Typography variant="h5" fontWeight="bold">
@@ -256,14 +289,37 @@ For official verification, contact NSSF at +256 312 234 400`;
         </Grid>
 
         <Grid item xs={12} md={6} lg={3}>
-          <Card elevation={3}>
+          <Card
+            elevation={3}
+            sx={{
+              transition: "all 0.3s ease",
+              "&:hover": {
+                transform: "translateY(-4px)",
+                boxShadow: "0 12px 28px rgba(255,107,53,0.15)",
+              },
+            }}
+          >
             <CardContent>
               <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                <Avatar sx={{ bgcolor: "success.main", mr: 2 }}>
+                <Avatar
+                  sx={{
+                    background: "linear-gradient(135deg, #FF6B35, #E5522F)",
+                    mr: 2,
+                    boxShadow: "0 4px 12px rgba(255,107,53,0.3)",
+                  }}
+                >
                   <TrendingUp />
                 </Avatar>
                 <Box>
-                  <Typography variant="h6" color="success.main">
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      background: "linear-gradient(45deg, #FF6B35, #003876)",
+                      backgroundClip: "text",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }}
+                  >
                     Monthly Pension
                   </Typography>
                   <Typography variant="h5" fontWeight="bold">

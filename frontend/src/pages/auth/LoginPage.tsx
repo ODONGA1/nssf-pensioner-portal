@@ -58,7 +58,8 @@ const LoginPage: React.FC = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #1B5E20 0%, #4CAF50 100%)",
+        background:
+          "linear-gradient(135deg, #003876 0%, #1976d2 50%, #FF6B35 100%)",
         display: "flex",
         alignItems: "center",
         py: 4,
@@ -74,26 +75,83 @@ const LoginPage: React.FC = () => {
                 component="h1"
                 gutterBottom
                 fontWeight="bold"
+                sx={{
+                  textShadow: "2px 2px 4px rgba(0,0,0,0.3)",
+                  mb: 1,
+                }}
               >
-                NSSF Pensioner
+                NSSF Uganda
               </Typography>
-              <Typography variant="h4" component="h1" gutterBottom>
-                Self-Service Portal
+              <Typography
+                variant="h4"
+                component="h2"
+                gutterBottom
+                sx={{
+                  color: "#FFE0B2",
+                  fontWeight: 500,
+                }}
+              >
+                Pensioner Self-Service Portal
               </Typography>
-              <Typography variant="h6" sx={{ mb: 4, opacity: 0.9 }}>
-                Secure access to your pension information and services
+              <Typography
+                variant="h6"
+                sx={{
+                  mb: 4,
+                  opacity: 0.95,
+                  color: "#E3F2FD",
+                }}
+              >
+                Secure digital access to your pension benefits and services
               </Typography>
 
               <Box sx={{ mb: 3 }}>
-                <Typography variant="body1" sx={{ mb: 2, fontSize: "1.1rem" }}>
-                  <strong>Access your pension services:</strong>
+                <Typography
+                  variant="body1"
+                  sx={{ mb: 2, fontSize: "1.1rem", fontWeight: 500 }}
+                >
+                  🏛️ <strong>Enhanced Pension Services:</strong>
                 </Typography>
-                <ul style={{ fontSize: "1rem", lineHeight: "1.8" }}>
-                  <li>View pension statements and balances</li>
-                  <li>Check payment history and schedules</li>
-                  <li>Update personal information</li>
-                  <li>Download pension certificates</li>
-                  <li>Communicate with NSSF staff</li>
+                <ul
+                  style={{
+                    fontSize: "1rem",
+                    lineHeight: "1.8",
+                    paddingLeft: "20px",
+                  }}
+                >
+                  <li>📊 Real-time pension balance and statements</li>
+                  <li>
+                    💰 SmartLife Voluntary Savings with goal-based planning
+                  </li>
+                  <li>📅 Payment history and upcoming schedules</li>
+                  <li>👤 Secure profile and beneficiary management</li>
+                  <li>📄 Instant certificate downloads and documentation</li>
+                  <li>💬 Direct communication with NSSF support team</li>
+                  <li>🎯 Personalized financial planning tools</li>
+                  <li>📱 Mobile-optimized responsive design</li>
+                </ul>
+              </Box>
+
+              <Box sx={{ mb: 3 }}>
+                <Typography
+                  variant="body1"
+                  sx={{ mb: 2, fontSize: "1.1rem", fontWeight: 500 }}
+                >
+                  🌟 <strong>New Features Available:</strong>
+                </Typography>
+                <ul
+                  style={{
+                    fontSize: "1rem",
+                    lineHeight: "1.8",
+                    paddingLeft: "20px",
+                  }}
+                >
+                  <li>
+                    🎯 Goal-based voluntary savings deposits and withdrawals
+                  </li>
+                  <li>📈 Advanced savings analytics and progress tracking</li>
+                  <li>🔔 Real-time notifications and alerts</li>
+                  <li>🛡️ Enhanced security with multi-factor authentication</li>
+                  <li>📊 Comprehensive financial dashboards</li>
                 </ul>
               </Box>
 
@@ -101,16 +159,26 @@ const LoginPage: React.FC = () => {
                 sx={{
                   mt: 4,
                   p: 3,
-                  bgcolor: "rgba(255,255,255,0.1)",
-                  borderRadius: 2,
+                  bgcolor: "rgba(255,255,255,0.15)",
+                  borderRadius: 3,
+                  backdropFilter: "blur(10px)",
+                  border: "1px solid rgba(255,255,255,0.2)",
                 }}
               >
-                <Typography variant="body2" sx={{ mb: 2 }}>
-                  <strong>Need Help?</strong>
+                <Typography variant="body2" sx={{ mb: 2, fontWeight: 600 }}>
+                  📞 <strong>Need Support?</strong>
                 </Typography>
                 <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
                   <Phone sx={{ mr: 1, fontSize: "1rem" }} />
-                  <Typography variant="body2">+256 414 342 891</Typography>
+                  <Typography variant="body2">
+                    Toll Free: 0800 286 773
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                  <Phone sx={{ mr: 1, fontSize: "1rem" }} />
+                  <Typography variant="body2">
+                    Direct: +256 312 234 400
+                  </Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <Email sx={{ mr: 1, fontSize: "1rem" }} />
@@ -133,30 +201,42 @@ const LoginPage: React.FC = () => {
                 backdropFilter: "blur(10px)",
               }}
             >
-              {/* NSSF Logo placeholder */}
+              {/* NSSF Logo */}
               <Box sx={{ textAlign: "center", mb: 3 }}>
                 <Box
                   sx={{
-                    width: 80,
-                    height: 80,
-                    borderRadius: "50%",
-                    bgcolor: "primary.main",
+                    width: 90,
+                    height: 90,
+                    borderRadius: "16px",
+                    background:
+                      "linear-gradient(135deg, #003876 0%, #FF6B35 100%)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     mx: "auto",
                     mb: 2,
+                    boxShadow: "0 8px 24px rgba(0,56,118,0.3)",
                   }}
                 >
-                  <Typography variant="h4" color="white" fontWeight="bold">
-                    N
+                  <Typography
+                    variant="h4"
+                    color="white"
+                    fontWeight="bold"
+                    sx={{ fontSize: "1.5rem" }}
+                  >
+                    NSSF
                   </Typography>
                 </Box>
-                <Typography variant="h5" component="h2" gutterBottom>
+                <Typography
+                  variant="h5"
+                  component="h2"
+                  gutterBottom
+                  fontWeight="600"
+                >
                   Welcome Back
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Sign in to access your pension portal
+                  Sign in to access your NSSF pension portal
                 </Typography>
               </Box>
 
@@ -223,10 +303,13 @@ const LoginPage: React.FC = () => {
                     mb: 2,
                     py: 1.5,
                     fontSize: "1.1rem",
-                    background: "linear-gradient(45deg, #1B5E20, #4CAF50)",
+                    background: "linear-gradient(45deg, #003876, #FF6B35)",
                     "&:hover": {
-                      background: "linear-gradient(45deg, #0D4214, #388E3C)",
+                      background: "linear-gradient(45deg, #001f3f, #E5522F)",
+                      transform: "translateY(-1px)",
+                      boxShadow: "0 4px 12px rgba(0,56,118,0.3)",
                     },
+                    transition: "all 0.3s ease",
                   }}
                 >
                   {loading ? (
@@ -260,7 +343,7 @@ const LoginPage: React.FC = () => {
                   color="text.secondary"
                   sx={{ mb: 2 }}
                 >
-                  Demo Accounts for Testing:
+                  🚀 Demo Accounts for Testing:
                 </Typography>
                 <Box
                   sx={{
@@ -274,18 +357,16 @@ const LoginPage: React.FC = () => {
                     size="small"
                     variant="outlined"
                     onClick={() => {
-                      setUsername("admin");
-                      setPassword("admin123");
-                    }}
-                  >
-                    Admin Demo
-                  </Button>
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    onClick={() => {
                       setUsername("john.mukasa");
                       setPassword("pensioner123");
+                    }}
+                    sx={{
+                      borderColor: "secondary.main",
+                      color: "secondary.main",
+                      "&:hover": {
+                        bgcolor: "secondary.main",
+                        color: "white",
+                      },
                     }}
                   >
                     Pensioner Demo
