@@ -1,6 +1,7 @@
 # NSSF Pensioner Portal - Production Deployment Guide
 
 ## 🚀 Deployment Status
+
 - **Repository**: https://github.com/ODONGA1/nssf-pensioner-portal
 - **Branch**: main
 - **Last Commit**: Complete NSSF branding implementation
@@ -10,12 +11,14 @@
 ## 📦 Build Information
 
 ### Frontend Build
+
 - **Status**: ✅ Compiled successfully
 - **Bundle Size**: 210.98 kB (optimized)
 - **Output**: `frontend/build/` directory
 - **Notes**: Minor ESLint warning for unused function (non-critical)
 
 ### Backend Build
+
 - **Status**: ✅ Compiled successfully
 - **Output**: `backend/dist/` directory
 - **TypeScript**: Successfully compiled to JavaScript
@@ -23,6 +26,7 @@
 ## 🌟 Recent Changes Deployed
 
 ### NSSF Branding Implementation
+
 - ✅ Complete visual transformation with official NSSF colors
 - ✅ Professional gradient styling across all pages
 - ✅ Enhanced user experience with institutional branding
@@ -30,6 +34,7 @@
 - ✅ Security improvement: Admin demo button removed
 
 ### Updated Pages
+
 1. **LoginPage.tsx** - Complete redesign with NSSF branding
 2. **Layout.tsx** - NSSF gradient navigation and sidebar
 3. **DashboardPage.tsx** - Professional NSSF card styling
@@ -42,9 +47,11 @@
 ## 🛠 Deployment Options
 
 ### Option 1: Static Hosting (Recommended for Demo)
+
 Perfect for showcasing the NSSF portal with static content.
 
 #### Netlify Deployment
+
 ```bash
 # Install Netlify CLI
 npm install -g netlify-cli
@@ -56,6 +63,7 @@ netlify deploy --prod --dir=build
 ```
 
 #### Vercel Deployment
+
 ```bash
 # Install Vercel CLI
 npm install -g vercel
@@ -67,6 +75,7 @@ vercel --prod
 ```
 
 #### GitHub Pages Deployment
+
 ```bash
 # Frontend is already configured for GitHub Pages
 # Push to main branch (already done)
@@ -76,6 +85,7 @@ vercel --prod
 ### Option 2: Full Stack Deployment
 
 #### Heroku Deployment
+
 ```bash
 # Install Heroku CLI
 # Create Heroku app
@@ -94,36 +104,38 @@ git push heroku main
 ```
 
 #### DigitalOcean App Platform
+
 ```yaml
 # app.yaml configuration
 name: nssf-pensioner-portal
 services:
-- name: frontend
-  source_dir: /frontend
-  github:
-    repo: ODONGA1/nssf-pensioner-portal
-    branch: main
-  build_command: npm run build
-  http_port: 3000
-  
-- name: backend
-  source_dir: /backend
-  github:
-    repo: ODONGA1/nssf-pensioner-portal
-    branch: main
-  build_command: npm run build
-  run_command: npm start
-  http_port: 5000
-  
+  - name: frontend
+    source_dir: /frontend
+    github:
+      repo: ODONGA1/nssf-pensioner-portal
+      branch: main
+    build_command: npm run build
+    http_port: 3000
+
+  - name: backend
+    source_dir: /backend
+    github:
+      repo: ODONGA1/nssf-pensioner-portal
+      branch: main
+    build_command: npm run build
+    run_command: npm start
+    http_port: 5000
+
 databases:
-- name: nssf-db
-  engine: PG
-  version: "13"
+  - name: nssf-db
+    engine: PG
+    version: "13"
 ```
 
 ### Option 3: Docker Deployment
 
 #### Docker Compose Production
+
 ```bash
 # Build and run with production configuration
 docker-compose -f docker-compose.prod.yml up -d
@@ -133,6 +145,7 @@ docker-compose -f docker-compose.prod.yml up -d --scale backend=2
 ```
 
 #### Kubernetes Deployment
+
 ```bash
 # Apply Kubernetes manifests
 kubectl apply -f k8s/
@@ -145,6 +158,7 @@ kubectl get services
 ## 🔧 Environment Configuration
 
 ### Production Environment Variables
+
 ```env
 # Backend (.env.production)
 NODE_ENV=production
@@ -159,6 +173,7 @@ REACT_APP_ENVIRONMENT=production
 ```
 
 ### Database Setup
+
 ```sql
 -- Production database initialization
 CREATE DATABASE nssf_pensioner_portal;
@@ -169,6 +184,7 @@ GRANT ALL PRIVILEGES ON DATABASE nssf_pensioner_portal TO nssf_user;
 ## 🔒 Security Checklist
 
 ### Pre-Deployment Security
+
 - ✅ Admin demo button removed from login
 - ✅ Environment variables secured
 - ✅ CORS properly configured
@@ -179,6 +195,7 @@ GRANT ALL PRIVILEGES ON DATABASE nssf_pensioner_portal TO nssf_user;
 - ✅ SQL injection prevention
 
 ### Post-Deployment Verification
+
 - [ ] Test all authentication flows
 - [ ] Verify NSSF branding consistency
 - [ ] Check responsive design on all devices
@@ -191,6 +208,7 @@ GRANT ALL PRIVILEGES ON DATABASE nssf_pensioner_portal TO nssf_user;
 ## 📊 Monitoring and Maintenance
 
 ### Health Checks
+
 ```bash
 # Frontend health check
 curl https://your-frontend-domain.com
@@ -203,6 +221,7 @@ curl https://your-backend-domain.com/api/db-status
 ```
 
 ### Performance Monitoring
+
 - Frontend bundle size: 210.98 kB
 - Backend response times: < 200ms
 - Database query optimization
@@ -211,12 +230,14 @@ curl https://your-backend-domain.com/api/db-status
 ## 🎯 Post-Deployment Tasks
 
 ### Immediate Tasks
+
 1. **Verify Deployment**: Test all core functionalities
 2. **Performance Check**: Monitor loading times and responsiveness
 3. **Security Audit**: Verify all security measures are active
 4. **User Testing**: Conduct final user acceptance testing
 
 ### Ongoing Maintenance
+
 1. **Monitor Logs**: Check for any errors or warnings
 2. **Performance Metrics**: Track user engagement and response times
 3. **Security Updates**: Keep dependencies updated
@@ -225,12 +246,14 @@ curl https://your-backend-domain.com/api/db-status
 ## 📱 Mobile and Accessibility
 
 ### Mobile Optimization
+
 - ✅ Responsive design implemented
 - ✅ NSSF branding consistent across devices
 - ✅ Touch-friendly interfaces
 - ✅ Fast loading on mobile networks
 
 ### Accessibility Features
+
 - ✅ WCAG 2.1 compliance maintained
 - ✅ Keyboard navigation support
 - ✅ Screen reader compatibility
@@ -239,6 +262,7 @@ curl https://your-backend-domain.com/api/db-status
 ## 🔄 Rollback Plan
 
 ### Quick Rollback
+
 ```bash
 # Rollback to previous commit if issues arise
 git revert HEAD
@@ -250,6 +274,7 @@ git push --force-with-lease origin main
 ```
 
 ### Database Rollback
+
 ```sql
 -- Backup current state before deployment
 pg_dump nssf_pensioner_portal > backup_$(date +%Y%m%d).sql
@@ -261,11 +286,13 @@ psql nssf_pensioner_portal < backup_YYYYMMDD.sql
 ## 📞 Support and Documentation
 
 ### Technical Support
+
 - **Repository**: https://github.com/ODONGA1/nssf-pensioner-portal
 - **Documentation**: See README.md and INSTALLATION.md
 - **Issues**: Use GitHub Issues for bug reports
 
 ### NSSF Branding Support
+
 - **Brand Guidelines**: See NSSF_COMPLETE_BRANDING.md
 - **Color Codes**: #003876 (Deep Blue), #FF6B35 (Orange)
 - **Implementation Guide**: See documentation files
@@ -273,6 +300,7 @@ psql nssf_pensioner_portal < backup_YYYYMMDD.sql
 ## 🎉 Deployment Success
 
 Your NSSF Pensioner Portal is now ready for production deployment with:
+
 - ✅ Complete NSSF official branding
 - ✅ Professional institutional appearance
 - ✅ Enhanced user experience
