@@ -1,11 +1,23 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { apiService } from "../services/apiService";
 
 // Types
+interface Pensioner {
+  id: string;
+  nssfNumber: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+}
+
 interface User {
   id: string;
   username: string;
   role: string;
-  pensionerId?: string;
+  pensioner?: Pensioner;
+  lastLogin?: string;
+  mustChangePassword?: boolean;
 }
 
 interface AuthContextType {
@@ -32,14 +44,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const initializeAuth = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        if (token) {
-          // Validate token with API (placeholder)
-          console.log("Validating token...");
-          // setUser(validatedUser);
+        const storedUser = localStorage.getItem("user");
+
+        if (token && storedUser) {
+          try {
+            const userData = JSON.parse(storedUser);
+            setUser(userData);
+
+            // Optionally verify token with backend
+            // const profile = await apiService.getProfile();
+            // setUser(profile.data.user);
+          } catch (error) {
+            console.error("Invalid stored user data:", error);
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("refreshToken");
+            localStorage.removeItem("user");
+          }
         }
       } catch (error) {
         console.error("Auth initialization error:", error);
         localStorage.removeItem("authToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("user");
       } finally {
         setIsLoading(false);
       }
@@ -51,30 +77,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const login = async (username: string, password: string): Promise<void> => {
     try {
       setIsLoading(true);
-      // API call placeholder
-      console.log("Logging in:", username, password);
+      console.log("🚀 Starting login process for:", username);
 
-      // Mock user for development
-      const mockUser: User = {
-        id: "1",
-        username,
-        role: "PENSIONER",
-        pensionerId: "pension-1",
-      };
+      const response = await apiService.login(username, password);
+      console.log("📡 API Response received:", response);
 
-      setUser(mockUser);
-      localStorage.setItem("authToken", "mock-token");
-    } catch (error) {
-      console.error("Login error:", error);
-      throw error;
+      if (response.success && response.data) {
+        console.log("✅ Login successful, setting user:", response.data.user);
+        setUser(response.data.user);
+      } else {
+        console.error("❌ Login failed - API returned:", response);
+        throw new Error(response.message || "Login failed");
+      }
+    } catch (error: any) {
+      console.error("💥 Login error:", error);
+      throw new Error(
+        error.message || "Login failed. Please check your credentials."
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
-  const logout = (): void => {
-    setUser(null);
-    localStorage.removeItem("authToken");
+  const logout = async (): Promise<void> => {
+    try {
+      await apiService.logout();
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      setUser(null);
+    }
   };
 
   const value: AuthContextType = {

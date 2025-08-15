@@ -31,7 +31,12 @@ dotenv.config();
 
 // Initialize Express app
 const app = express();
-const PORT = process.env.PORT || 5000;
+// Clean restart after auth file cleanup
+// Force restart for port 3004
+// Force restart for port 3003
+// Force restart for port change to 3002
+// Force restart for port change
+const PORT = process.env.PORT || 3001;
 const API_VERSION = process.env.API_VERSION || "v1";
 
 // Initialize Prisma Client
@@ -207,14 +212,28 @@ process.on("unhandledRejection", (reason, promise) => {
 // Start server
 const startServer = async () => {
   try {
-    // Test database connection
-    await prisma.$connect();
-    logger.info("Connected to PostgreSQL database");
+    // Test database connection (optional for development)
+    try {
+      await prisma.$connect();
+      logger.info("Connected to PostgreSQL database");
+    } catch (dbError) {
+      logger.warn(
+        "Database connection failed - running without database:",
+        dbError
+      );
+    }
 
     // Connect to Redis if configured
     if (process.env.REDIS_HOST) {
-      await connectRedis();
-      logger.info("Connected to Redis");
+      try {
+        await connectRedis();
+        logger.info("Connected to Redis");
+      } catch (redisError) {
+        logger.warn(
+          "Redis connection failed - running without Redis:",
+          redisError
+        );
+      }
     }
 
     // Start HTTP server

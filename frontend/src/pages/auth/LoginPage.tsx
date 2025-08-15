@@ -24,6 +24,7 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import ForgotPassword from "../../components/auth/ForgotPassword";
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -31,19 +32,31 @@ const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("🎯 Login form submitted");
+    console.log(
+      "📝 Form data - Username:",
+      username,
+      "Password length:",
+      password.length
+    );
+
     setLoading(true);
     setError("");
 
     try {
+      console.log("🚀 Calling login function...");
       await login(username, password);
+      console.log("✅ Login successful, navigating to dashboard...");
       navigate("/dashboard");
     } catch (err: any) {
+      console.error("❌ Login failed:", err);
       setError(err.message || "Login failed. Please check your credentials.");
     } finally {
       setLoading(false);
@@ -326,9 +339,15 @@ const LoginPage: React.FC = () => {
                     color="primary"
                     onClick={(e) => {
                       e.preventDefault();
-                      // Handle forgot password
+                      setForgotPasswordOpen(true);
                     }}
-                    sx={{ textDecoration: "none" }}
+                    sx={{
+                      textDecoration: "none",
+                      "&:hover": {
+                        textDecoration: "underline",
+                        color: "#FF6B35",
+                      },
+                    }}
                   >
                     Forgot your password?
                   </Link>
@@ -357,8 +376,8 @@ const LoginPage: React.FC = () => {
                     size="small"
                     variant="outlined"
                     onClick={() => {
-                      setUsername("john.mukasa");
-                      setPassword("pensioner123");
+                      setUsername("NSS12345678");
+                      setPassword("password123");
                     }}
                     sx={{
                       borderColor: "secondary.main",
@@ -369,7 +388,25 @@ const LoginPage: React.FC = () => {
                       },
                     }}
                   >
-                    Pensioner Demo
+                    John Mukasa Demo
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    onClick={() => {
+                      setUsername("NSS87654321");
+                      setPassword("password123");
+                    }}
+                    sx={{
+                      borderColor: "primary.main",
+                      color: "primary.main",
+                      "&:hover": {
+                        bgcolor: "primary.main",
+                        color: "white",
+                      },
+                    }}
+                  >
+                    Mary Nakato Demo
                   </Button>
                 </Box>
               </Box>
@@ -377,6 +414,12 @@ const LoginPage: React.FC = () => {
           </Grid>
         </Grid>
       </Container>
+
+      {/* Forgot Password Modal */}
+      <ForgotPassword
+        open={forgotPasswordOpen}
+        onClose={() => setForgotPasswordOpen(false)}
+      />
     </Box>
   );
 };
