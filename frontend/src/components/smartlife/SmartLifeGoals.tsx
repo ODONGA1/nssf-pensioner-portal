@@ -132,6 +132,7 @@ const SmartLifeGoals: React.FC<SmartLifeGoalsProps> = ({ onBack }) => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "home":
